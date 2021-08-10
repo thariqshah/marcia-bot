@@ -47,6 +47,6 @@ public class YtsLookupService implements MovieLookupService {
                 .builder()
                 .baseUrl("https://marcia-bot.herokuapp.com/")
                 .build().get().retrieve();
-         client.bodyToMono(Object.class).block();
+         client.bodyToMono(Object.class).doOnError(error -> log.info("received error from self ping"));
     }
 }
