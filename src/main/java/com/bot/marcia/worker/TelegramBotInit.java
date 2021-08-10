@@ -46,7 +46,7 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            log.debug("message received via telegram from user the {}", update.getMessage().getChat().getUserName());
+            log.debug("message received via telegram from user the {}", update.getMessage().getChat().getFirstName());
             this.reply(update);
         }
     }
