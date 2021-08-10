@@ -6,8 +6,11 @@ import com.bot.marcia.dto.YtsJsonSchema;
 import com.bot.marcia.service.MovieLookupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.ZonedDateTime;
 
 
 /**
@@ -34,5 +37,16 @@ public class YtsLookupService implements MovieLookupService {
                         .queryParam("order_by", "desc")
                         .build()).retrieve();
         return client.bodyToMono(YtsJsonSchema.class).block();
+    }
+
+
+    @Scheduled(cron = "0 */30 * ? * *")
+    public void pingSelf(){
+        log.info("scheduler running to ping heroku instance at {}", ZonedDateTime.now());
+        WebClient.ResponseSpec client = WebClient
+                .builder()
+                .baseUrl("https://marcia-bot.herokuapp.com/")
+                .build().get().retrieve();
+         client.bodyToMono(Object.class).doOnError(error -> log.info("received error from self ping"));
     }
 }
