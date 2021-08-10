@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * @author Thariq
+ * @created 10-08-2021
+ **/
 @Service
 public class MovieInfoCreator {
 

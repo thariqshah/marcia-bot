@@ -1,14 +1,18 @@
 package com.bot.marcia.worker;
 
-import com.bot.marcia.common.Resources;
+import com.bot.marcia.common.Util;
+import com.bot.marcia.configuration.AppConfiguration;
 import com.bot.marcia.service.impl.YtsLookupService;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Thariq
+ * @created 10-08-2021
+ **/
 @Slf4j
 @Service
 public class DiscordBot {
@@ -22,16 +26,20 @@ public class DiscordBot {
     @Autowired
     private MovieEmbedBuilder embedBuilder;
 
-    public void initDiscord() {
+    @Autowired
+    private AppConfiguration appConfiguration;
 
+    public void initDiscord() {
+        log.debug("Initializing discord bot");
         DiscordApi api = new DiscordApiBuilder().
-                setToken(Resources.discordBotToken)
+                setToken(appConfiguration.getDiscordBotToken())
                 .login()
                 .join();
-
+        log.debug("Initialized discord bot");
         api.addMessageCreateListener(event -> {
             if (!event.getMessageAuthor().isBotUser()) {
-                if (!event.getMessage().getMentionedUsers().isEmpty()&&event.getMessage().getMentionedUsers().get(0).getId()==874578310955421716l) {
+                if (!event.getMessage().getMentionedUsers().isEmpty() && event.getMessage().getMentionedUsers().get(0).getId() == 874578310955421716l) {
+                    log.debug("message received via discord from user the {}", event.getMessageAuthor().getDisplayName());
                     event.getChannel().sendMessage(embedBuilder.embedBuilder(movieInfoCreator.buildMovieInfo(ytsLookupService.buildARequestWithQuery(event.getMessageContent().substring(22)))));
                 }
             }
