@@ -7,9 +7,10 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-@Component
+@Service
 public class DiscordBot {
 
     @Autowired
@@ -30,8 +31,8 @@ public class DiscordBot {
 
         api.addMessageCreateListener(event -> {
             if (!event.getMessageAuthor().isBotUser()) {
-                if (event.getMessage().getContent().startsWith("-find")) {
-                    event.getChannel().sendMessage(embedBuilder.embedBuilder(movieInfoCreator.buildMovieInfo(ytsLookupService.buildARequestWithQuery(event.getMessageContent().substring(4)))));
+                if (!event.getMessage().getMentionedUsers().isEmpty()&&event.getMessage().getMentionedUsers().get(0).getId()==874578310955421716l) {
+                    event.getChannel().sendMessage(embedBuilder.embedBuilder(movieInfoCreator.buildMovieInfo(ytsLookupService.buildARequestWithQuery(event.getMessageContent().substring(22)))));
                 }
             }
         });
