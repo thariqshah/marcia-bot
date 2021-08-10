@@ -18,7 +18,7 @@ public class YtsLookupService implements MovieLookupService {
                 .build().get().uri(uriBuilder -> uriBuilder
                         .queryParam("query_term",query)
                         .queryParam("sort_by","download_count")
-                        .queryParam("query_term","desc")
+                        .queryParam("order_by","desc")
                         .build()).retrieve();
         return client.bodyToMono(YtsJsonSchema.class).block();
     }
