@@ -1,0 +1,4134 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "status_message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "movie_count": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer"
+        },
+        "page_number": {
+          "type": "integer"
+        },
+        "movies": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "imdb_code": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "title_english": {
+                  "type": "string"
+                },
+                "title_long": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "runtime": {
+                  "type": "integer"
+                },
+                "genres": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "description_full": {
+                  "type": "string"
+                },
+                "synopsis": {
+                  "type": "string"
+                },
+                "yt_trailer_code": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "mpa_rating": {
+                  "type": "string"
+                },
+                "background_image": {
+                  "type": "string"
+                },
+                "background_image_original": {
+                  "type": "string"
+                },
+                "small_cover_image": {
+                  "type": "string"
+                },
+                "medium_cover_image": {
+                  "type": "string"
+                },
+                "large_cover_image": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "torrents": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "quality": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "seeds": {
+                          "type": "integer"
+                        },
+                        "peers": {
+                          "type": "integer"
+                        },
+                        "size": {
+                          "type": "string"
+                        },
+                        "size_bytes": {
+                          "type": "integer"
+                        },
+                        "date_uploaded": {
+                          "type": "string"
+                        },
+                        "date_uploaded_unix": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "hash",
+                        "quality",
+                        "type",
+                        "seeds",
+                        "peers",
+                        "size",
+                        "size_bytes",
+                        "date_uploaded",
+                        "date_uploaded_unix"
+                      ]
+                    }
+                  ]
+                },
+                "date_uploaded": {
+                  "type": "string"
+                },
+                "date_uploaded_unix": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "imdb_code",
+                "title",
+                "title_english",
+                "title_long",
+                "slug",
+                "year",
+                "rating",
+                "runtime",
+                "genres",
+                "summary",
+                "description_full",
+                "synopsis",
+                "yt_trailer_code",
+                "language",
+                "mpa_rating",
+                "background_image",
+                "background_image_original",
+                "small_cover_image",
+                "medium_cover_image",
+                "large_cover_image",
+                "state",
+                "torrents",
+                "date_uploaded",
+                "date_uploaded_unix"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "movie_count",
+        "limit",
+        "page_number",
+        "movies"
+      ]
+    },
+    "@meta": {
+      "type": "object",
+      "properties": {
+        "server_time": {
+          "type": "integer"
+        },
+        "server_timezone": {
+          "type": "string"
+        },
+        "api_version": {
+          "type": "integer"
+        },
+        "execution_time": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "server_time",
+        "server_timezone",
+        "api_version",
+        "execution_time"
+      ]
+    }
+  },
+  "required": [
+    "status",
+    "status_message",
+    "data",
+    "@meta"
+  ]
+}
