@@ -3,10 +3,12 @@ package com.bot.marcia.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
-
+/**
+ * @author Thariq
+ * @created 10-08-2021
+ **/
 @Builder
 @Data
 public class MovieInfo {
@@ -23,5 +25,5 @@ public class MovieInfo {
 
     private String coverImageUrl;
 
-    private Map<String,String> torrentUrl;
+    private Map<String, String> torrentUrl;
 }

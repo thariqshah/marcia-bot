@@ -1,1 +1,12 @@
+server:
+  port: 8082
 
+spring:
+  application:
+    name: marcia-bot
+
+
+application-configurations:
+  discord-bot-token: ODc0NTc4MzEwOTU1NDIxNzE2.YRJAhg.SAv1cSd6lwzyz-Ec3mFh60LuWfg
+  telegram-bot-token: 1721139961:AAHJ8fc_ZMPhwQA2Jfu5euwyDoWQf5J9-IQ
+  yts-api-base-url: https://yts.mx/api/v2/list_movies.json

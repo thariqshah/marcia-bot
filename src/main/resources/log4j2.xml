@@ -10,27 +10,27 @@
         <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <RollingFile name="FileAppender" fileName="/apps/log/application.log"
-                     filePattern="/apps/log/application-%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>${LOG_PATTERN}</Pattern>
-            </PatternLayout>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10MB" />
-                <TimeBasedTriggeringPolicy interval="1"/>
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
+<!--        <RollingFile name="FileAppender" fileName="/apps/log/application.log"-->
+<!--                     filePattern="/apps/log/application-%d{yyyy-MM-dd}-%i.log.gz">-->
+<!--            <PatternLayout>-->
+<!--                <Pattern>${LOG_PATTERN}</Pattern>-->
+<!--            </PatternLayout>-->
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="10MB" />-->
+<!--                <TimeBasedTriggeringPolicy interval="1"/>-->
+<!--            </Policies>-->
+<!--            <DefaultRolloverStrategy max="10"/>-->
+<!--        </RollingFile>-->
     </Appenders>
 
     <Loggers>
         <Logger name="com.bot.marcia" level="DEBUG" additivity="false">
-            <AppenderRef ref="FileAppender" />
+<!--            <AppenderRef ref="FileAppender" />-->
             <AppenderRef ref="ConsoleAppender" />
         </Logger>
-        <Root level="info">
+        <Root level="INFO">
             <AppenderRef ref="ConsoleAppender" />
-            <AppenderRef ref="FileAppender" />
+<!--            <AppenderRef ref="FileAppender" />-->
         </Root>
     </Loggers>
 </Configuration>
