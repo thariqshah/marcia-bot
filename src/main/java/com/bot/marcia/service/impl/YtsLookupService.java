@@ -15,7 +15,11 @@ public class YtsLookupService implements MovieLookupService {
         WebClient.ResponseSpec client = WebClient
                 .builder()
                 .baseUrl(Resources.YTS_BASE_URL)
-                .build().get().uri(uriBuilder -> uriBuilder.queryParam("query_term",query).build()).retrieve();
+                .build().get().uri(uriBuilder -> uriBuilder
+                        .queryParam("query_term",query)
+                        .queryParam("sort_by","download_count")
+                        .queryParam("query_term","desc")
+                        .build()).retrieve();
         return client.bodyToMono(YtsJsonSchema.class).block();
     }
 }
