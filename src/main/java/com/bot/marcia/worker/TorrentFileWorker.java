@@ -15,7 +15,7 @@ public class TorrentFileWorker {
 
     //todo return torrent url , quality
 
-    public Map<String, ApplicationEnums.MovieFileQuality> returnTorrentUrlsFromYTS(YtsJsonSchema data) {
+    public Map<String, String> returnTorrentUrlsFromYTS(YtsJsonSchema data) {
         Map<String, ApplicationEnums.MovieFileQuality> movieTorrents = new HashMap<>();
         Map<String, String> movieTorrentss = new HashMap<>();
         Map<String, Object> movieObject = (Map<String, Object>) data.getData().getMovies().get(0);
@@ -24,6 +24,6 @@ public class TorrentFileWorker {
         ) {
             movieTorrentss.put(torrent.get("quality"),torrent.get("url"));
         }
-        return movieTorrents;
+        return movieTorrentss;
     }
 }
