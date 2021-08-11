@@ -40,7 +40,7 @@ public class YtsLookupService implements MovieLookupService {
     }
 
 
-    @Scheduled(cron = "0 */30 * ? * *")
+    @Scheduled(cron = "0 */15 * ? * *")
     public void pingSelf(){
         log.info("scheduler running to ping heroku instance at {}", ZonedDateTime.now());
         WebClient.ResponseSpec client = WebClient
