@@ -12,6 +12,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.Scheduled;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 
 
 /**
@@ -20,6 +22,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
  **/
 @Slf4j
 @EnableConfigurationProperties(AppConfiguration.class)
+@EnableScheduling
 @SpringBootApplication
 public class MarciaApplication implements CommandLineRunner {
 
