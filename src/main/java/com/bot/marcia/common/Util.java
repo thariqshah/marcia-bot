@@ -8,8 +8,9 @@ package com.bot.marcia.common;
 public class Util {
 
     public static String buildTelegramIntroMessage(String name) {
-        return "Hey " + name + "!\n\n" +
-                "I Search ytx.mx for movies. Type in the exact movie title" +
-                "\n\n<i>made with ♥ and java </i>";
+        return "Hello " + name + "!\n\n" +
+                "I Search ytx.mx for movies and send you back torrent files I find." +
+                "\nYou can start by replying with a movie name" +
+                "\n\n<i></i>";
     }
 }

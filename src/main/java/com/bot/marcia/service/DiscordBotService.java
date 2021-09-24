@@ -1,6 +1,5 @@
-package com.bot.marcia.worker;
+package com.bot.marcia.service;
 
-import com.bot.marcia.common.Util;
 import com.bot.marcia.configuration.AppConfiguration;
 import com.bot.marcia.service.impl.YtsLookupService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,16 +14,16 @@ import org.springframework.stereotype.Service;
  **/
 @Slf4j
 @Service
-public class DiscordBot {
+public class DiscordBotService {
 
     @Autowired
     private YtsLookupService ytsLookupService;
 
     @Autowired
-    private MovieInfoCreator movieInfoCreator;
+    private MovieInfoCreatorService movieInfoCreatorService;
 
     @Autowired
-    private MovieEmbedBuilder embedBuilder;
+    private MovieEmbedBuilderService embedBuilder;
 
     @Autowired
     private AppConfiguration appConfiguration;
@@ -40,7 +39,7 @@ public class DiscordBot {
             if (!event.getMessageAuthor().isBotUser()) {
                 if (!event.getMessage().getMentionedUsers().isEmpty() && event.getMessage().getMentionedUsers().get(0).getId() == 874578310955421716l) {
                     log.debug("message received via discord from user the {}", event.getMessageAuthor().getDisplayName());
-                    event.getChannel().sendMessage(embedBuilder.embedBuilder(movieInfoCreator.buildMovieInfo(ytsLookupService.buildARequestWithQuery(event.getMessageContent().substring(22)))));
+                    event.getChannel().sendMessage(embedBuilder.embedBuilder(movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(event.getMessageContent().substring(22)))));
                 }
             }
         });

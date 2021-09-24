@@ -1,4 +1,4 @@
-package com.bot.marcia.worker;
+package com.bot.marcia.service;
 
 import com.bot.marcia.common.Util;
 import com.bot.marcia.configuration.AppConfiguration;
@@ -24,7 +24,7 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     public YtsLookupService ytsLookupService;
 
     @Autowired
-    public MovieInfoCreator movieInfoCreator;
+    public MovieInfoCreatorService movieInfoCreatorService;
 
     @Autowired
     public StringBuilderForTelegram stringBuilderForTelegram;
@@ -70,7 +70,7 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     private void lookupMovieSource(Update update, SendMessage message) {
         try {
             message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
-                    movieInfoCreator.buildMovieInfo(
+                    movieInfoCreatorService.buildMovieInfo(
                             ytsLookupService.buildARequestWithQuery(update.getMessage().getText()))));
             message.setParseMode("HTML");
             message.enableWebPagePreview();

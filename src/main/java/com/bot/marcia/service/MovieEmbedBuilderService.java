@@ -1,4 +1,4 @@
-package com.bot.marcia.worker;
+package com.bot.marcia.service;
 
 import com.bot.marcia.dto.MovieInfo;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -12,7 +12,7 @@ import java.util.Map;
  * @created 10-08-2021
  **/
 @Component
-public class MovieEmbedBuilder {
+public class MovieEmbedBuilderService {
 
     public EmbedBuilder embedBuilder(MovieInfo movieInfo) {
         EmbedBuilder embed = new EmbedBuilder()

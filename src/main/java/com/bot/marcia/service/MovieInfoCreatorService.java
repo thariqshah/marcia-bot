@@ -1,4 +1,4 @@
-package com.bot.marcia.worker;
+package com.bot.marcia.service;
 
 import com.bot.marcia.dto.MovieInfo;
 import com.bot.marcia.dto.YtsJsonSchema;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @created 10-08-2021
  **/
 @Service
-public class MovieInfoCreator {
+public class MovieInfoCreatorService {
 
     public MovieInfo buildMovieInfo(YtsJsonSchema ytsJsonSchema) {
 

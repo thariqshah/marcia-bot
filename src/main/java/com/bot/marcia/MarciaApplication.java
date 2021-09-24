@@ -1,19 +1,17 @@
 package com.bot.marcia;
 
 import com.bot.marcia.configuration.AppConfiguration;
-import com.bot.marcia.worker.DiscordBot;
-import com.bot.marcia.worker.TelegramBotInit;
+import com.bot.marcia.service.DiscordBotService;
+import com.bot.marcia.service.TelegramBotInit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
 
 
 /**
@@ -22,12 +20,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  **/
 @Slf4j
 @EnableConfigurationProperties(AppConfiguration.class)
-@EnableScheduling
 @SpringBootApplication
+@PropertySource("application.yml")
 public class MarciaApplication implements CommandLineRunner {
 
     @Autowired
-    private DiscordBot discordBot;
+    private DiscordBotService discordBotService;
 
     @Autowired
     private TelegramBotInit telegramBotInit;
@@ -38,7 +36,7 @@ public class MarciaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        discordBot.initDiscord();
+        discordBotService.initDiscord();
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(telegramBotInit);
     }

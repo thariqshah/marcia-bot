@@ -1,4 +1,4 @@
-package com.bot.marcia.worker;
+package com.bot.marcia.service;
 
 
 import com.bot.marcia.dto.MovieInfo;
