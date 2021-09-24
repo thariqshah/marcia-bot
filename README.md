@@ -3,7 +3,7 @@
 ---
 
 A simple light-weight spring boot application which queries ytx api for movie torrent files. <br>
-Discord bot & Telegram bot build on top of [JAVACORD](https://github.com/Javacord/Javacord) Discord Bot Java Library and [Telegram Bot](https://github.com/rubenlagus/TelegramBots) Telegram Bot Java Library
+Discord bot & Telegram bot build on top of [JAVACORD](https://github.com/Javacord/Javacord)  Library and [Telegram Bot](https://github.com/rubenlagus/TelegramBots) Library
 
 # Requirements
 
