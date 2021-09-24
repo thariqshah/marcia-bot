@@ -2,7 +2,8 @@
 
 ---
 
-Spring boot application that listens to Telegram and discord Messages. Search YTS library for movie torrent files.
+A simple light-weight spring boot application which queries ytx api for movie torrent files. <br>
+Discord bot & Telegram bot build on top of [JAVACORD](https://github.com/Javacord/Javacord) Discord Bot Java Library and [Telegram Bot](https://github.com/rubenlagus/TelegramBots) Telegram Bot Java Library
 
 # Requirements
 
@@ -15,10 +16,10 @@ Spring boot application that listens to Telegram and discord Messages. Search YT
 mvn -e -P clean package -DskipTests
 ```
 
-* Docker 
+* Docker
 
 ```bash
-docker build --tag=marcia-bot:latest
+docker build -t marcia-bot:latest .
 ```
 
 # Configuring the bot tokens
@@ -33,7 +34,7 @@ discord-bot-token: { your discord bot token goes here }
 telegram-bot-token: { your telegram bot token goes here }
 ```
 
-#Live versions 
+# Live versions
 
 ---
 
@@ -42,6 +43,8 @@ Telegram: [https://t.me/marcia_movie_bot](https://t.me/marcia_movie_bot)
 Discord: [click here to invite bot to your channel](https://discord.com/oauth2/authorize?client_id=874578310955421716&scope=bot&permissions=0)
 
 
+# Bot Commands
 
-
+Discord: @Marica {moviename} <br>
+telegram: send movie name as private message 
 
