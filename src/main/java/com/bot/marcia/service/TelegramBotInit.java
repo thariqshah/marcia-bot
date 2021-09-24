@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -46,7 +47,7 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            log.debug("message received via telegram from user the {}", update.getMessage().getChat().getFirstName());
+            log.debug("message received via telegram from user the {}", update.getMessage().getFrom().getFirstName());
             this.reply(update);
         }
     }
@@ -54,24 +55,52 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     private void reply(Update update) {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId().toString());
-        if (update.getMessage().getText().equals("/start") || update.getMessage().getText().equals("/help") || update.getMessage().getText().equalsIgnoreCase("hello")) {
-            message.setParseMode("HTML");
-            message.setText(Util.buildTelegramIntroMessage(update.getMessage().getChat().getFirstName()));
-        } else {
-            this.lookupMovieSource(update, message);
+        if (!update.getMessage().isGroupMessage() && !update.getMessage().getFrom().getIsBot()) {
+            replyToPrivateMessages(update, message);
         }
+        else if (update.getMessage().isGroupMessage() && !update.getMessage().getFrom().getIsBot() && update.getMessage().getText().startsWith("@marcia_movie_bot") || update.getMessage().getText().startsWith("/start")) {
+            replyToGroupMessages(update, message);
+        }
+        else if (update.getMessage().getReplyToMessage() !=null && update.getMessage().getReplyToMessage().getFrom().getUserName().equals("marcia_movie_bot")) {
+            replyToPrivateMessages(update, message);
+        }
+        else return;
         try {
+            setReplyToAMessageId(message,update.getMessage().getMessageId());
             execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
+    private void replyToPrivateMessages(Update update, SendMessage message) {
+        if (update.getMessage().getText().equals("/start") || update.getMessage().getText().equals("/help") || update.getMessage().getText().equalsIgnoreCase("hello")) {
+            message.setParseMode("HTML");
+            message.setText(Util.buildTelegramIntroMessage(update.getMessage().getChat().getFirstName()));
+        } else {
+            this.lookupMovieSource(update, message);
+        }
+    }
+
+    private void replyToGroupMessages(Update update, SendMessage message) {
+        if (update.getMessage().getText().startsWith("/start")) {
+            message.setParseMode("HTML");
+            message.setText(Util.buildTelegramIntroMessage(update.getMessage().getFrom().getFirstName()));
+        } else {
+            this.lookupMovieSource(update, message);
+        }
+    }
+
     private void lookupMovieSource(Update update, SendMessage message) {
         try {
-            message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
-                    movieInfoCreatorService.buildMovieInfo(
-                            ytsLookupService.buildARequestWithQuery(update.getMessage().getText()))));
+            if (update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot"))
+                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
+                        movieInfoCreatorService.buildMovieInfo(
+                                ytsLookupService.buildARequestWithQuery(update.getMessage().getText().substring(17)))));
+            else
+                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
+                        movieInfoCreatorService.buildMovieInfo(
+                                ytsLookupService.buildARequestWithQuery(update.getMessage().getText()))));
             message.setParseMode("HTML");
             message.enableWebPagePreview();
         } catch (Exception e) {
@@ -79,6 +108,11 @@ public class TelegramBotInit extends TelegramLongPollingBot {
             message.setParseMode("HTML");
             message.enableWebPagePreview();
         }
+    }
+
+    private SendMessage setReplyToAMessageId(SendMessage outgoingMessage,Integer incomingId){
+        outgoingMessage.setReplyToMessageId(incomingId);
+        return outgoingMessage;
     }
 
 }
