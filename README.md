@@ -10,8 +10,10 @@ Discord bot & Telegram bot build on top of [JAVACORD](https://github.com/Javacor
 ---
 
 * Java 11
-* Maven 3
+* Maven 3 <br>
 
+
+build command
 ```bash
 mvn -e -P clean package -DskipTests
 ```
@@ -21,6 +23,18 @@ mvn -e -P clean package -DskipTests
 ```bash
 docker build -t marcia-bot:latest .
 ```
+
+jar run command
+```bash
+java -jar {jar file name} --SECRET_KEY= {bot token secret}
+```
+
+Docker container
+
+```bash
+docker run  marcia-bot --SECRET_KEY= {bot token secret}
+```
+
 
 # Configuring the bot tokens
 
