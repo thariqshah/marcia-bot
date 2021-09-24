@@ -7,8 +7,8 @@ spring:
 
 
 application-configurations:
-  discord-bot-token: ENC(NWHiOARaSmvtxlNFssa+RDbnPwWylV54+NePnwTjfKEzBptiqTS4mwqWpROkBIjZPwAUe/+Jsn4PRyNL7+MAgLdaly5SbBja)
-  telegram-bot-token: ENC(CB4hjy6YpiB9qOrVzx6vcQmBug/x3eCLhqwu6fvp2xHIjIsk9tt/6sfVpREdLLX0LJtN6WZGpDI=)
+  discord-bot-token: ENC(zgKwE10tlCy00vZE3xxClJVWp6/WeWsr623TesZg5CaRfInNkZyKLe33IrjZsKFEqRfWlh8RxGFUBS1/9/KhCJNjnH7okeI5)
+  telegram-bot-token: ENC(aXTGyRcaK5Gh+bAOColZZHOv0xo9EJiR0ndUOI7a8x/SU3343yqAdcU0eHPXzPwkCNVzg2RBh/I=)
   yts-api-base-url: https://yts.mx/api/v2/list_movies.json
 
 jasypt:
