@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim as bulid
+FROM openjdk:17-jdk-slim as bulid
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
