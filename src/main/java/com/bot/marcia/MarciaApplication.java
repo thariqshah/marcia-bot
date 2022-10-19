@@ -11,7 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+import javax.annotation.PostConstruct;
 
 
 /**
@@ -22,7 +25,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @EnableConfigurationProperties(AppConfiguration.class)
 @SpringBootApplication
 @PropertySource("application.yml")
-public class MarciaApplication implements CommandLineRunner {
+public class MarciaApplication {
 
     @Autowired
     private DiscordBotService discordBotService;
@@ -34,8 +37,9 @@ public class MarciaApplication implements CommandLineRunner {
         SpringApplication.run(MarciaApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+
+    @PostConstruct
+    public void initializeBots() throws TelegramApiException {
         discordBotService.initDiscord();
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(telegramBotInit);
