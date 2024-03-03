@@ -40,7 +40,7 @@ public class MarciaApplication {
 
     @PostConstruct
     public void initializeBots() throws TelegramApiException {
-        discordBotService.initDiscord();
+//        discordBotService.initDiscord();
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(telegramBotInit);
     }
