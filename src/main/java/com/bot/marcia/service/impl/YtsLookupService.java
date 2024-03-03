@@ -32,15 +32,4 @@ public class YtsLookupService implements MovieLookupService {
                         .build()).retrieve();
         return client.bodyToMono(YtsJsonSchema.class).block();
     }
-
-    public JsonNode listMovies(){
-        WebClient.ResponseSpec client = WebClient
-                .builder()
-                .baseUrl("https://yts.mx/api/v2/list_movies.json")
-                .build().get().uri(uriBuilder -> uriBuilder
-                        .queryParam("limit", 10)
-                        .queryParam("page", "1")
-                        .build()).retrieve();
-        return client.bodyToMono(JsonNode.class).block();
-    }
 }
