@@ -1,17 +1,21 @@
-package com.bot.marcia.service;
+package com.bot.marcia.telegram;
 
 import com.bot.marcia.common.Util;
+import com.bot.marcia.service.MovieInfoCreatorService;
+import com.bot.marcia.service.StringBuilderForTelegram;
 import com.bot.marcia.service.impl.YtsLookupService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,23 +23,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.net.URL;
 import java.util.ArrayList;
 
-
-/**
- * @author Thariq
- * @created 10-08-2021
- **/
-@Deprecated
+@RequiredArgsConstructor
 @Slf4j
-public class TelegramBotInit extends TelegramLongPollingBot {
+@Component
+public class MarciaBot extends TelegramLongPollingBot {
 
-    @Autowired
-    public YtsLookupService ytsLookupService;
+    public final YtsLookupService ytsLookupService;
 
-    @Autowired
-    public MovieInfoCreatorService movieInfoCreatorService;
+    public final MovieInfoCreatorService movieInfoCreatorService;
 
-    @Autowired
-    public StringBuilderForTelegram stringBuilderForTelegram;
+    public final StringBuilderForTelegram stringBuilderForTelegram;
 
     @Value("${application-configurations.telegram-bot-token}")
     private String telegramBotToken;
@@ -50,7 +47,6 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     public String getBotUsername() {
         return "marcia_movie_bot";
     }
-
     @Override
     public void onUpdateReceived(Update update) {
         if(update.hasCallbackQuery())
@@ -116,19 +112,15 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     private void lookupMovieSource(Update update, SendMessage message) {
         try {
 
-           var movieInfo = update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot") ?
+            var movieInfo = update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot") ?
                     movieInfoCreatorService.buildMovieInfo(
-                    ytsLookupService.buildARequestWithQuery(update.getMessage().getText().substring(17))) :  movieInfoCreatorService.buildMovieInfo(
+                            ytsLookupService.buildARequestWithQuery(update.getMessage().getText().substring(17))) :  movieInfoCreatorService.buildMovieInfo(
                     ytsLookupService.buildARequestWithQuery(update.getMessage().getText()));
 
             if (update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot"))
-                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
-                        movieInfoCreatorService.buildMovieInfo(
-                                ytsLookupService.buildARequestWithQuery(update.getMessage().getText().substring(17)))));
+                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(movieInfo));
             else
-                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(
-                        movieInfoCreatorService.buildMovieInfo(
-                                ytsLookupService.buildARequestWithQuery(update.getMessage().getText()))));
+                message.setText(stringBuilderForTelegram.buildMovieInfoTelegram(movieInfo));
 
             var buttons = new ArrayList<InlineKeyboardButton>();
 
@@ -154,12 +146,11 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     @SneakyThrows
     private void sendFile(String hash,String chatId,int messageId){
         SendDocument document = new SendDocument();
-            document.setChatId(chatId);
-            InputFile file = new InputFile();
-            file.setMedia(new URL("https://yts.mx/torrent/download/%s".formatted(hash)).openStream(),hash+".torrent");
-            document.setDocument(file);
-            document.setReplyToMessageId(messageId);
-            execute(document);
+        document.setChatId(chatId);
+        InputFile file = new InputFile();
+        file.setMedia(new URL("https://yts.mx/torrent/download/%s".formatted(hash)).openStream(),hash+".torrent");
+        document.setDocument(file);
+        document.setReplyToMessageId(messageId);
+        execute(document);
     }
-
 }
