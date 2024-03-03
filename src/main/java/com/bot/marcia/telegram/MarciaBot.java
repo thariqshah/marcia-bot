@@ -19,7 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,26 +54,57 @@ public class MarciaBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_POPULAR_"))
+        if (update.getMessage() != null && update.getMessage().isUserMessage())
+            this.executeCommands(update.getMessage().getText(), update);
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_POPULAR_")) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
             this.answerCallBackQueryForNextPopular(update.getCallbackQuery());
-        else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("YTS_LOOKUP"))
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("YTS_LOOKUP")) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
             this.answerCallForYtsLookup(update);
-        else if (update.hasCallbackQuery())
-            this.answerCallBackQuery(update.getCallbackQuery());
-        else if (update.getMessage().getText().startsWith("/wheretowatch")) {
-            this.answerWhereToWatch(update);
-        } else if (update.getMessage().getText().startsWith("/download")) {
-            log.debug("message received via telegram from user the {}", update.getMessage().getFrom().getFirstName());
-            try {
-                update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(2).getText());
-                this.reply(update);
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().matches("([A-F\\d]{40})")) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
+            this.answerCallBackForTorrentHash(update.getCallbackQuery());
+        }
+    }
+
+    private void executeCommands(String command, Update update) throws TelegramApiException {
+        switch (command) {
+            case "/start", "/help", "/hello": {
+                SendMessage message = new SendMessage();
+                message.setParseMode("HTML");
+                message.setText(Util.buildTelegramIntroMessage(update.getMessage().getChat().getFirstName()));
+                message.setChatId(update.getMessage().getChatId());
+                execute(message);
+                break;
             }
-        } else if (update.getMessage().getText().startsWith("")) {
-            try {
+            case "/popular": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.popularAction(message, 1);
+                break;
+            }
+            case "/wheretowatch": {
+                this.answerWhereToWatch(update);
+                break;
+            }
+            case "/download": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setReplyToMessageId(update.getMessage().getMessageId());
+                update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(2).getText());
+                execute(this.lookupMovieSource(update, message));
+                break;
+            }
+            default:
                 this.findAMovie(update);
-            } catch (Exception e) {
+                break;
+                /*
                 SendMessage message = new SendMessage();
                 log.error("error looking up movie", e);
                 message.setReplyToMessageId(update.getMessage().getMessageId());
@@ -83,7 +113,7 @@ public class MarciaBot extends TelegramLongPollingBot {
                 message.setParseMode("HTML");
                 message.enableWebPagePreview();
                 execute(message);
-            }
+                */
         }
     }
 
@@ -97,36 +127,47 @@ public class MarciaBot extends TelegramLongPollingBot {
             message.enableWebPagePreview();
             some.setText(some.getEntities().get(2).getText());
             update.setMessage(some);
-            var result = this.lookupMovieSource(update, message);
+            this.lookupMovieSource(update, message);
             execute(message);
         } catch (Exception e) {
             log.error("", e);
         }
     }
 
+    private void popularAction(SendMessage message, int page) throws TelegramApiException {
+        var results = movieDBClient.getPopularMovies(page);
+
+        int n = results.getResults().size();
+        for (int i = 0; i < n; i++) {
+            var string = messageTemplates.makePopularMovieHtml(results.getResults().get(i), i);
+            message.setText(string);
+            message.setParseMode("HTML");
+            execute(message);
+            if (i == n - 1) {
+                var buttons = new ArrayList<InlineKeyboardButton>();
+                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_POPULAR_%d".formatted(++page)).build());
+                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
+                message.setReplyMarkup(inlineKeyboardMarkup);
+            }
+        }
+    }
+
+    @SneakyThrows
     private void findAMovie(Update update) {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
         message.setReplyToMessageId(update.getMessage().getMessageId());
-        this.findAMovie(message, update.getMessage().getText());
-    }
+        var result = movieDBClient.searchAMovie(update.getMessage().getText());
 
-    @SneakyThrows
-    private void findAMovie(SendMessage message, String keyword) {
-        var result = movieDBClient.searchAMovie(keyword);
-        var totalpage = result.getTotalPages().intValue();
-
-        int n = 0;
-        while (n <= totalpage) {
-            var string = messageTemplates.makePopularMovieHtml(result, n);
-            message.setText(string);
+        int n = result.getResults().size();
+        for (int i = 0; i < n; i++) {
+            message.setText(messageTemplates.makePopularMovieHtml(result.getResults().get(i), i));
             message.setParseMode("HTML");
             var buttons = new ArrayList<InlineKeyboardButton>();
             buttons.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
             InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
             message.setReplyMarkup(inlineKeyboardMarkup);
             execute(message);
-            n++;
         }
     }
 
@@ -157,96 +198,31 @@ public class MarciaBot extends TelegramLongPollingBot {
     private void answerCallBackQueryForNextPopular(CallbackQuery callbackQuery) {
         SendMessage message = new SendMessage();
         message.setChatId(callbackQuery.getMessage().getChatId().toString());
-        this.popularAction(message, callbackQuery.getData().substring(13));
+        this.popularAction(message, Integer.parseInt(callbackQuery.getData().substring(13)));
     }
 
     @SneakyThrows
-    private void answerCallBackQuery(CallbackQuery callbackQuery) {
+    private void answerCallBackForTorrentHash(CallbackQuery callbackQuery) {
         AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
         answerCallbackQuery.setCallbackQueryId(callbackQuery.getId());
         answerCallbackQuery.setText("Sending you the torrent file!");
         answerCallbackQuery.setShowAlert(Boolean.TRUE);
-
         execute(answerCallbackQuery);
         this.sendFile(callbackQuery.getData(), String.valueOf(callbackQuery.getMessage().getChatId()), callbackQuery.getMessage().getMessageId());
     }
 
-    private void reply(Update update) throws TelegramApiException {
-        SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId().toString());
-        if (!update.getMessage().isGroupMessage() && !update.getMessage().getFrom().getIsBot()) {
-            replyToPrivateMessages(update, message);
-        } else if (update.getMessage().isGroupMessage() && !update.getMessage().getFrom().getIsBot() && update.getMessage().getText().startsWith("@marcia_movie_bot") || update.getMessage().getText().startsWith("/start")) {
-            replyToGroupMessages(update, message);
-        } else if (update.getMessage().getReplyToMessage() != null && update.getMessage().getReplyToMessage().getFrom().getUserName().equals("marcia_movie_bot")) {
-            replyToPrivateMessages(update, message);
-        } else return;
-        try {
-            setReplyToAMessageId(message, update.getMessage().getMessageId());
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SneakyThrows
-    private void replyToPrivateMessages(Update update, SendMessage message) {
-        if (update.getMessage().getText().equals("/start") || update.getMessage().getText().equals("/help") || update.getMessage().getText().equalsIgnoreCase("hello")) {
-            message.setParseMode("HTML");
-            message.setText(Util.buildTelegramIntroMessage(update.getMessage().getChat().getFirstName()));
-        } else if (update.getMessage().getText().startsWith("/popular")) {
-            this.popularAction(message, "1");
-        } else {
-            this.lookupMovieSource(update, message);
-        }
-    }
-
-    private void replyToGroupMessages(Update update, SendMessage message) throws TelegramApiException {
-        if (update.getMessage().getText().startsWith("/start")) {
-            message.setParseMode("HTML");
-            message.setText(Util.buildTelegramIntroMessage(update.getMessage().getFrom().getFirstName()));
-        } else if (update.getMessage().getText().startsWith("/popular")) {
-            popularAction(message, "1");
-        } else {
-            this.lookupMovieSource(update, message);
-        }
-    }
-
-    private void popularAction(SendMessage message, String page) throws TelegramApiException {
-        Integer pageInt = Integer.parseInt(page);
-        pageInt++;
-        int n = 0;
-        while (n < 20) {
-            var result = movieDBClient.getPopularMovies(page);
-            var string = messageTemplates.makePopularMovieHtml(result, n);
-            message.setText(string);
-            message.setParseMode("HTML");
-            if (n != 19) {
-                execute(message);
-            } else {
-                var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_POPULAR_%d".formatted(pageInt)).build());
-                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-                message.setReplyMarkup(inlineKeyboardMarkup);
-            }
-            n++;
-        }
-    }
 
     private SendMessage lookupMovieSource(Update update, SendMessage message) {
         try {
             MovieInfo movieInfo;
             try {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(
-                        ytsLookupService.buildARequestWithQuery(update.getMessage().getText()));
+                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(update.getMessage().getText()));
             } catch (IndexOutOfBoundsException e) {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(
-                        ytsLookupService.buildARequestWithQuery(update.getMessage().getText().replaceAll("\\([^()]*\\)", "")));
+                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(update.getMessage().getText().replaceAll("\\([^()]*\\)", "")));
             }
             if (update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot"))
                 message.setText(messageTemplates.makeMovieFromYts(movieInfo));
-            else
-                message.setText(messageTemplates.makeMovieFromYts(movieInfo));
+            else message.setText(messageTemplates.makeMovieFromYts(movieInfo));
 
             var buttons = new ArrayList<InlineKeyboardButton>();
 
@@ -263,11 +239,6 @@ public class MarciaBot extends TelegramLongPollingBot {
             message.enableWebPagePreview();
         }
         return message;
-    }
-
-    private SendMessage setReplyToAMessageId(SendMessage outgoingMessage, Integer incomingId) {
-        outgoingMessage.setReplyToMessageId(incomingId);
-        return outgoingMessage;
     }
 
     @SneakyThrows
