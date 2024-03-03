@@ -1,11 +1,11 @@
 package com.bot.marcia.service;
 
 import com.bot.marcia.common.Util;
-import com.bot.marcia.configuration.AppConfiguration;
 import com.bot.marcia.service.impl.YtsLookupService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -13,20 +13,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 /**
@@ -46,12 +37,12 @@ public class TelegramBotInit extends TelegramLongPollingBot {
     @Autowired
     public StringBuilderForTelegram stringBuilderForTelegram;
 
-    @Autowired
-    private AppConfiguration appConfiguration;
+    @Value("${application-configurations.telegram-bot-token}")
+    private String telegramBotToken;
 
     @Override
     public String getBotToken() {
-        return appConfiguration.getTelegramBotToken();
+        return telegramBotToken;
     }
 
 
@@ -62,6 +53,7 @@ public class TelegramBotInit extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        var object = ytsLookupService.listMovies();
         if(update.hasCallbackQuery())
             this.answerCallBackQuery(update.getCallbackQuery());
         if (update.hasMessage() && update.getMessage().hasText()) {
