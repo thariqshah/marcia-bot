@@ -1,9 +1,9 @@
 package com.bot.marcia.service.impl;
 
 
-import com.bot.marcia.configuration.AppConfiguration;
 import com.bot.marcia.dto.YtsJsonSchema;
 import com.bot.marcia.service.MovieLookupService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,8 @@ import org.springframework.web.reactive.function.client.WebClient;
  * @created 10-08-2021
  **/
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class YtsLookupService implements MovieLookupService {
-
-    private final AppConfiguration appConfiguration;
     //todo set timeout and retry, error specific exceptions
 
     @Override
@@ -27,12 +24,23 @@ public class YtsLookupService implements MovieLookupService {
         log.debug("Querying yts for movie info with : {} ", query);
         WebClient.ResponseSpec client = WebClient
                 .builder()
-                .baseUrl(appConfiguration.getYtsApiBaseUrl())
+                .baseUrl("https://yts.mx/api/v2/list_movies.json")
                 .build().get().uri(uriBuilder -> uriBuilder
                         .queryParam("query_term", query)
                         .queryParam("sort_by", "download_count")
                         .queryParam("order_by", "desc")
                         .build()).retrieve();
         return client.bodyToMono(YtsJsonSchema.class).block();
+    }
+
+    public JsonNode listMovies(){
+        WebClient.ResponseSpec client = WebClient
+                .builder()
+                .baseUrl("https://yts.mx/api/v2/list_movies.json")
+                .build().get().uri(uriBuilder -> uriBuilder
+                        .queryParam("limit", 10)
+                        .queryParam("page", "1")
+                        .build()).retrieve();
+        return client.bodyToMono(JsonNode.class).block();
     }
 }

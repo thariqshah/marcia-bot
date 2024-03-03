@@ -1,11 +1,11 @@
 package com.bot.marcia.service;
 
-import com.bot.marcia.configuration.AppConfiguration;
 import com.bot.marcia.service.impl.YtsLookupService;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,13 +25,13 @@ public class DiscordBotService {
     @Autowired
     private MovieEmbedBuilderService embedBuilder;
 
-    @Autowired
-    private AppConfiguration appConfiguration;
+    @Value("${application-configurations.discord-bot-token}")
+    private String discordToken;
 
     public void initDiscord() {
         log.debug("Initializing discord bot");
         DiscordApi api = new DiscordApiBuilder().
-                setToken(appConfiguration.getDiscordBotToken())
+                setToken(discordToken)
                 .login()
                 .join();
         log.debug("Initialized discord bot");

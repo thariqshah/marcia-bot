@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
 public interface MovieLookupService {
 
     Object buildARequestWithQuery(String query);
+
 }
