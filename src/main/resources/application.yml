@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: marcia-bot
   datasource:
@@ -27,3 +30,10 @@ feign:
         requestInterceptors:
           - com.bot.marcia.moviedb.feign.interceptor.Interceptor
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      path-mapping:
+        prometheus: "metrics"

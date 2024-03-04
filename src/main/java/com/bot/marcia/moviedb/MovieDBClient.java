@@ -110,7 +110,7 @@ public class MovieDBClient {
     public MoviedbPopular getFavList(Integer accountId,String sessionId,String page) {
         WebClient.ResponseSpec client = WebClient
                 .builder()
-                .baseUrl("https://api.themoviedb.org/3/account/%d/favorite/movies?language=en-US&page=1&sort_by=created_at.asc".formatted(accountId))
+                .baseUrl("https://api.themoviedb.org/3/account/%d/favorite/movies?language=en-US&page=%s&sort_by=created_at.asc".formatted(accountId,page))
                 .build().get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("session_id", sessionId)

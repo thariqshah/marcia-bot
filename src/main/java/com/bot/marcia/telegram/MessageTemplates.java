@@ -34,4 +34,22 @@ public class MessageTemplates {
                 movieInfo.getLongName(),
                 movieInfo.getDesc());
     }
+    public static String buildTelegramIntroMessage(String name) {
+        return """
+                Hello %s ,
+                
+                Feeds on themoviedb.org for movie information.
+                
+                👉 Check commands to see actions
+                👉 /login could be used to Authorize with themoviedb.org
+                👉 /popular to see trending movies
+                👉 /recommend get recommendations - login required
+                👉 Reply /download to get torrent file
+                👉 Reply /addtowatchlist to add watch List
+                👉 Reply /addtofav to add Fav List
+                👉 List /fav, /watchlist
+                
+                """.formatted(name);
+    }
+
 }
