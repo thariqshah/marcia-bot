@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 
 /**
@@ -16,10 +17,9 @@ import org.springframework.web.reactive.function.client.WebClient;
  **/
 @Slf4j
 @Service
-public class YtsLookupService implements MovieLookupService {
+public class YtsLookupService {
     //todo set timeout and retry, error specific exceptions
 
-    @Override
     public YtsJsonSchema buildARequestWithQuery(String query) {
         log.debug("Querying yts for movie info with : {} ", query);
         WebClient.ResponseSpec client = WebClient
