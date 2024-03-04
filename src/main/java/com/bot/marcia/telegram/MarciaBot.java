@@ -6,9 +6,8 @@ import com.bot.marcia.dto.MoviedbPopular;
 import com.bot.marcia.moviedb.MovieDBClient;
 import com.bot.marcia.moviedb.UserSession;
 import com.bot.marcia.moviedb.UserSessionRepository;
-import com.bot.marcia.service.MovieInfoCreatorService;
-import com.bot.marcia.service.StringBuilderForTelegram;
-import com.bot.marcia.service.impl.YtsLookupService;
+import com.bot.marcia.yts.MovieInfoCreatorService;
+import com.bot.marcia.yts.YtsLookupService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +34,6 @@ public class MarciaBot extends TelegramLongPollingBot {
     public final YtsLookupService ytsLookupService;
 
     public final MovieInfoCreatorService movieInfoCreatorService;
-
-    public final StringBuilderForTelegram stringBuilderForTelegram;
 
     private final MovieDBClient movieDBClient;
 
@@ -80,10 +77,10 @@ public class MarciaBot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("GENERATE_SESSION_/")) {
             this.answerCallForPermission(update);
         }
-        if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_WATCH_LIST_")){
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_WATCH_LIST_")) {
             SendMessage message = new SendMessage();
             message.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
-            this.getWatchList(message,update.getCallbackQuery().getData().replace("NEXT_WATCH_LIST_",""));
+            this.getWatchList(message, update.getCallbackQuery().getData().replace("NEXT_WATCH_LIST_", ""));
         }
     }
 
@@ -143,7 +140,8 @@ public class MarciaBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setReplyToMessageId(update.getMessage().getMessageId());
                 update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(3).getText());
-                execute(this.lookupMovieSource(update, message));
+                var movie = movieDBClient.getMovie(update.getMessage().getReplyToMessage().getEntities().get(1).getText());
+                execute(this.lookupMovieSource(update, message, movie.getImdbId()));
                 break;
             }
             case "/login": {
@@ -175,31 +173,31 @@ public class MarciaBot extends TelegramLongPollingBot {
             case "/watchlist": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
-                this.getWatchList(message,"1");
+                this.getWatchList(message, "1");
                 break;
             }
             case "/fav": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
-                this.getFavList(message,"1");
+                this.getFavList(message, "1");
                 break;
             }
             case "/addtofav": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
-                this.addToFavList(update.getMessage(),true);
+                this.addToFavList(update.getMessage(), true);
                 break;
             }
             case "/removewatchlist": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
-                this.addToWatchList(update.getMessage(),false);
+                this.addToWatchList(update.getMessage(), false);
                 break;
             }
             case "/removefav": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
-                this.addToFavList(update.getMessage(),false);
+                this.addToFavList(update.getMessage(), false);
                 break;
             }
             default:
@@ -210,24 +208,24 @@ public class MarciaBot extends TelegramLongPollingBot {
 
     private void addToFavList(Message message, boolean add) {
         var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
-        var response = movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(),add);
+        var response = movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
     }
 
     private void getFavList(SendMessage message, String pageNumber) throws TelegramApiException {
         var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
-        var watchList = movieDBClient.getFavList(user.get().getAccountId(),user.get().getSessionId(),pageNumber);
-        this.respondWatchListMessage(message,watchList, Integer.valueOf(pageNumber));
+        var watchList = movieDBClient.getFavList(user.get().getAccountId(), user.get().getSessionId(), pageNumber);
+        this.respondWatchListMessage(message, watchList, Integer.valueOf(pageNumber));
     }
 
     private void getWatchList(SendMessage message, String pageNumber) throws TelegramApiException {
         var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
-        var watchList = movieDBClient.getWatchList(user.get().getAccountId(),user.get().getSessionId(),pageNumber);
-        this.respondWatchListMessage(message,watchList, Integer.valueOf(pageNumber));
+        var watchList = movieDBClient.getWatchList(user.get().getAccountId(), user.get().getSessionId(), pageNumber);
+        this.respondWatchListMessage(message, watchList, Integer.valueOf(pageNumber));
     }
 
-    private void respondWatchListMessage(SendMessage message, MoviedbPopular watchList,Integer page) throws TelegramApiException {
+    private void respondWatchListMessage(SendMessage message, MoviedbPopular watchList, Integer page) throws TelegramApiException {
         int n = watchList.getResults().size();
-        if(n==0){
+        if (n == 0) {
             message.setText("No Movies in watchlist, Add some /addtowatchlist");
             message.setParseMode("HTML");
             execute(message);
@@ -248,7 +246,7 @@ public class MarciaBot extends TelegramLongPollingBot {
 
     private void addToWatchList(Message message, boolean add) {
         var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
-        var response = movieDBClient.addToWatchList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(),add);
+        var response = movieDBClient.addToWatchList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
     }
 
     private void answerCallForYtsLookup(Update update) {
@@ -259,9 +257,10 @@ public class MarciaBot extends TelegramLongPollingBot {
             message.setReplyToMessageId(update.getCallbackQuery().getMessage().getMessageId());
             message.setParseMode("HTML");
             message.enableWebPagePreview();
+            var movie = movieDBClient.getMovie(messageFromCallback.getEntities().get(1).getText());
             messageFromCallback.setText(messageFromCallback.getEntities().get(3).getText());
             update.setMessage(messageFromCallback);
-            this.lookupMovieSource(update, message);
+            this.lookupMovieSource(update, message, movie.getImdbId());
             execute(message);
         } catch (Exception e) {
             log.error("", e);
@@ -346,13 +345,13 @@ public class MarciaBot extends TelegramLongPollingBot {
     }
 
 
-    private SendMessage lookupMovieSource(Update update, SendMessage message) {
+    private SendMessage lookupMovieSource(Update update, SendMessage message, String imdbId) {
         try {
             MovieInfo movieInfo;
             try {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(update.getMessage().getText()));
+                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(imdbId));
             } catch (IndexOutOfBoundsException e) {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(update.getMessage().getText().replaceAll("\\([^()]*\\)", "")));
+                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(imdbId));
             }
             if (update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot"))
                 message.setText(messageTemplates.makeMovieFromYts(movieInfo));
