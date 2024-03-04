@@ -104,16 +104,6 @@ public class MarciaBot extends TelegramLongPollingBot {
             default:
                 this.findAMovie(update);
                 break;
-                /*
-                SendMessage message = new SendMessage();
-                log.error("error looking up movie", e);
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                message.setChatId(update.getMessage().getChatId());
-                message.setText("I couldn't find what you are looking for \uD83D\uDC94");
-                message.setParseMode("HTML");
-                message.enableWebPagePreview();
-                execute(message);
-                */
         }
     }
 
@@ -160,7 +150,7 @@ public class MarciaBot extends TelegramLongPollingBot {
         var result = movieDBClient.searchAMovie(update.getMessage().getText());
 
         int n = result.getResults().size();
-        for (int i = 0; i < n; i++) {
+        for (int i = 5; i >= 0; i--) {
             message.setText(messageTemplates.makePopularMovieHtml(result.getResults().get(i), i));
             message.setParseMode("HTML");
             var buttons = new ArrayList<InlineKeyboardButton>();
