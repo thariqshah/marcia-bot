@@ -14,6 +14,14 @@ import org.springframework.web.util.UriBuilder;
 @Service
 public class MovieDBClient {
 
+    public MoviedbPopular getRecommendation(int pagenumber,String accountId) {
+        WebClient.ResponseSpec client = WebClient
+                .builder()
+                .baseUrl("https://api.themoviedb.org/4/account/%s/movie/recommendations?page=&d&language=en-US".formatted(accountId,pagenumber))
+                .build().get().uri(UriBuilder::build).header("Authorization","Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNmJjMGIxMzU0ODJjYjk0OTE3YTcxMWFlNGY0N2IxYSIsInN1YiI6IjY1ZTQ4NzdmOTk3OWQyMDE3Y2IyNjgyNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pEBoKzhJzpJq3-wcoWycoxCAYPfjliUHnypqtHTmLH0").retrieve();
+        return client.bodyToMono(MoviedbPopular.class).block();
+    }
+
     public MoviedbPopular getPopularMovies(int pagenumber) {
         WebClient.ResponseSpec client = WebClient
                 .builder()

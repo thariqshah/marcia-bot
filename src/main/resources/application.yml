@@ -15,3 +15,15 @@ application-configurations:
   telegram-bot-token: 1721139961:AAF2WhC-sOaUbX3ACuj0AfWp2CjnHNwWhi0
   yts-api-base-url: https://yts.mx/api/v2/list_movies.json
 
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+      moviedbservice:
+        requestInterceptors:
+          - com.bot.marcia.moviedb.feign.interceptor.Interceptor
+

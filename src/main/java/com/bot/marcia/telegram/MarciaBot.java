@@ -3,9 +3,8 @@ package com.bot.marcia.telegram;
 import com.bot.marcia.common.Util;
 import com.bot.marcia.dto.MovieInfo;
 import com.bot.marcia.dto.MoviedbPopular;
-import com.bot.marcia.moviedb.MovieDBClient;
-import com.bot.marcia.moviedb.UserSession;
-import com.bot.marcia.moviedb.UserSessionRepository;
+import com.bot.marcia.moviedb.*;
+import com.bot.marcia.moviedb.feign.MovieDbFeignClient;
 import com.bot.marcia.yts.MovieInfoCreatorService;
 import com.bot.marcia.yts.YtsLookupService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +38,8 @@ public class MarciaBot extends TelegramLongPollingBot {
 
     private final UserSessionRepository userSessionRepository;
 
+    private final MovieDbFeignClient movieDbFeignClient;
+
     @Value("${application-configurations.telegram-bot-token}")
     private String telegramBotToken;
 
@@ -48,6 +49,8 @@ public class MarciaBot extends TelegramLongPollingBot {
     }
 
     private final MessageTemplates messageTemplates;
+
+    private final TokenStorageRepository tokenStorageRepository;
 
     @Override
     public String getBotUsername() {
@@ -74,7 +77,7 @@ public class MarciaBot extends TelegramLongPollingBot {
             update.setMessage(message);
             this.answerCallBackForTorrentHash(update.getCallbackQuery());
         }
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("GENERATE_SESSION_/")) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("GENERATE_SESSION")) {
             this.answerCallForPermission(update);
         }
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_WATCH_LIST_")) {
@@ -103,16 +106,27 @@ public class MarciaBot extends TelegramLongPollingBot {
     }
 
     private void saveSession(CallbackQuery callbackQuery) {
-        var requestToken = Arrays.asList(callbackQuery.getData().split("/")).get(1);
-        var sessionResponse = movieDBClient.generateSessionId(requestToken);
-        var account = movieDBClient.getAccountId(sessionResponse.session_id());
+        var requestToken = tokenStorageRepository.findById(String.valueOf(callbackQuery.getMessage().getChatId())).get().getRequestToken();
+        var accessToken = movieDbFeignClient.createAccessToken("""
+                {
+                  "request_token": "%s"
+                }
+                """.formatted(requestToken));
+        var sessionToken = movieDbFeignClient.createSession("""
+                {
+                  "access_token": "%s"
+                }
+                """.formatted(accessToken.access_token()));
+        var account = movieDBClient.getAccountId(sessionToken.session_id());
         UserSession session = new UserSession();
         session.setChatId(Math.toIntExact(callbackQuery.getMessage().getChatId()));
         session.setUsername(account.getUsername());
-        session.setSessionId(sessionResponse.session_id());
+        session.setSessionId(sessionToken.session_id());
         session.setRequestToken(requestToken);
+        session.setAccessToken(accessToken.access_token());
         session.setAccountId(account.getId().intValue());
-        var savedSession = userSessionRepository.save(session);
+        session.setAccountObjectId(accessToken.account_id());
+        userSessionRepository.save(session);
     }
 
     private void executeCommands(String command, Update update) throws TelegramApiException {
@@ -148,17 +162,22 @@ public class MarciaBot extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setReplyToMessageId(update.getMessage().getMessageId());
-                var requestToken = movieDBClient.generateRequestToken();
+                var requestToken = movieDbFeignClient.createRequestToken();
                 var text = """
                         Authorize me to themoviedb.org
                                                 
-                        - Click the link: https://www.themoviedb.org/authenticate/%s
+                        - Click the link: <a href= "https://www.themoviedb.org/auth/access?request_token=%s">AUTHORIZE THE MOVIE DB</a>
                         - Authorize bot
                         - Come back and click Permission ✅
                         """.formatted(requestToken.request_token());
+                message.setParseMode("HTML");
                 message.setText(text);
                 var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(InlineKeyboardButton.builder().text("Permission ✅").callbackData("GENERATE_SESSION_/%s".formatted(requestToken.request_token())).build());
+                TokenStorage tokenStorage = new TokenStorage();
+                tokenStorage.setChatId(message.getChatId());
+                tokenStorage.setRequestToken(requestToken.request_token());
+                tokenStorageRepository.save(tokenStorage);
+                buttons.add(InlineKeyboardButton.builder().text("Permission ✅").callbackData("GENERATE_SESSION").build());
                 InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
                 message.setReplyMarkup(inlineKeyboardMarkup);
                 execute(message);
@@ -200,15 +219,27 @@ public class MarciaBot extends TelegramLongPollingBot {
                 this.addToFavList(update.getMessage(), false);
                 break;
             }
+            case "/recommend": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.recommendMovies(message, "1");
+                break;
+            }
             default:
                 this.findAMovie(update);
                 break;
         }
     }
 
+    private void recommendMovies(SendMessage message, String number) throws TelegramApiException {
+        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
+        var watchList = movieDbFeignClient.getRecommendMovies(user.get().getAccountObjectId(), number);
+        this.respondWatchListMessage(message, watchList, Integer.valueOf(number));
+    }
+
     private void addToFavList(Message message, boolean add) {
         var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
-        var response = movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
+        movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
     }
 
     private void getFavList(SendMessage message, String pageNumber) throws TelegramApiException {
@@ -234,8 +265,13 @@ public class MarciaBot extends TelegramLongPollingBot {
             var string = messageTemplates.makePopularMovieHtml(watchList.getResults().get(i), i);
             message.setText(string);
             message.setParseMode("HTML");
+            var downloadButton = new ArrayList<InlineKeyboardButton>();
+            downloadButton.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
+            InlineKeyboardMarkup downloadMarkupKeyboard = InlineKeyboardMarkup.builder().keyboardRow(downloadButton).build();
+            message.setReplyMarkup(downloadMarkupKeyboard);
             if (i == n - 1) {
                 var buttons = new ArrayList<InlineKeyboardButton>();
+                buttons.add(downloadButton.get(0));
                 buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_WATCH_LIST_%d".formatted(++page)).build());
                 InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
                 message.setReplyMarkup(inlineKeyboardMarkup);
