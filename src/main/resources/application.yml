@@ -1,7 +1,15 @@
 spring:
   application:
     name: marcia-bot
-
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;
+    username: marcia
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
 
 application-configurations:
   discord-bot-token: ODc0NTc4MzEwOTU1NDIxNzE2.GUHBYS.Jk_tF6wTlyE7HsABvcPqg57w4AGC4o_9tnPSso
