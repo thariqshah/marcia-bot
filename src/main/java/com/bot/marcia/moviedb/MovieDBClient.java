@@ -1,6 +1,7 @@
 package com.bot.marcia.moviedb;
 
 import com.bot.marcia.dto.MovieDbAccountInfo;
+import com.bot.marcia.dto.MovieDbMovie;
 import com.bot.marcia.dto.MoviedbPopular;
 import com.bot.marcia.moviedb.dto.RequestTokenDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -128,5 +129,16 @@ public class MovieDBClient {
                         }
                         """.formatted(movieId,add))).retrieve();
         return client.bodyToMono(RequestTokenDTO.class).block();
+    }
+
+    public MovieDbMovie getMovie(String movieId) {
+        WebClient.ResponseSpec client = WebClient
+                .builder()
+                .baseUrl("https://api.themoviedb.org/3/movie/"+movieId)
+                .build().get().uri(UriBuilder::build)
+                .header("Authorization",
+                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNmJjMGIxMzU0ODJjYjk0OTE3YTcxMWFlNGY0N2IxYSIsInN1YiI6IjY1ZTQ4NzdmOTk3OWQyMDE3Y2IyNjgyNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pEBoKzhJzpJq3-wcoWycoxCAYPfjliUHnypqtHTmLH0").retrieve();
+        return client.bodyToMono(MovieDbMovie.class)
+                .block();
     }
 }

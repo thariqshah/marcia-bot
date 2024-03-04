@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "status_message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "movie": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "url": {
+              "type": "string"
+            },
+            "imdb_code": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "title_english": {
+              "type": "string"
+            },
+            "title_long": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "year": {
+              "type": "number"
+            },
+            "rating": {
+              "type": "number"
+            },
+            "runtime": {
+              "type": "number"
+            },
+            "genres": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "like_count": {
+              "type": "number"
+            },
+            "description_intro": {
+              "type": "string"
+            },
+            "description_full": {
+              "type": "string"
+            },
+            "yt_trailer_code": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string"
+            },
+            "mpa_rating": {
+              "type": "string"
+            },
+            "background_image": {
+              "type": "string"
+            },
+            "background_image_original": {
+              "type": "string"
+            },
+            "small_cover_image": {
+              "type": "string"
+            },
+            "medium_cover_image": {
+              "type": "string"
+            },
+            "large_cover_image": {
+              "type": "string"
+            },
+            "torrents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "hash": {
+                    "type": "string"
+                  },
+                  "quality": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "is_repack": {
+                    "type": "string"
+                  },
+                  "video_codec": {
+                    "type": "string"
+                  },
+                  "bit_depth": {
+                    "type": "string"
+                  },
+                  "audio_channels": {
+                    "type": "string"
+                  },
+                  "seeds": {
+                    "type": "number"
+                  },
+                  "peers": {
+                    "type": "number"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "size_bytes": {
+                    "type": "number"
+                  },
+                  "date_uploaded": {
+                    "type": "string"
+                  },
+                  "date_uploaded_unix": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "url",
+                  "hash",
+                  "quality",
+                  "type",
+                  "is_repack",
+                  "video_codec",
+                  "bit_depth",
+                  "audio_channels",
+                  "seeds",
+                  "peers",
+                  "size",
+                  "size_bytes",
+                  "date_uploaded",
+                  "date_uploaded_unix"
+                ]
+              }
+            },
+            "date_uploaded": {
+              "type": "string"
+            },
+            "date_uploaded_unix": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "url",
+            "imdb_code",
+            "title",
+            "title_english",
+            "title_long",
+            "slug",
+            "year",
+            "rating",
+            "runtime",
+            "genres",
+            "like_count",
+            "description_intro",
+            "description_full",
+            "yt_trailer_code",
+            "language",
+            "mpa_rating",
+            "background_image",
+            "background_image_original",
+            "small_cover_image",
+            "medium_cover_image",
+            "large_cover_image",
+            "torrents",
+            "date_uploaded",
+            "date_uploaded_unix"
+          ]
+        }
+      },
+      "required": [
+        "movie"
+      ]
+    },
+    "@meta": {
+      "type": "object",
+      "properties": {
+        "server_time": {
+          "type": "number"
+        },
+        "server_timezone": {
+          "type": "string"
+        },
+        "api_version": {
+          "type": "number"
+        },
+        "execution_time": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "server_time",
+        "server_timezone",
+        "api_version",
+        "execution_time"
+      ]
+    }
+  },
+  "required": [
+    "status",
+    "status_message",
+    "data",
+    "@meta"
+  ]
+}

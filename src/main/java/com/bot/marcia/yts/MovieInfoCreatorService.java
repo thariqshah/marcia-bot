@@ -1,4 +1,4 @@
-package com.bot.marcia.service;
+package com.bot.marcia.yts;
 
 import com.bot.marcia.dto.MovieInfo;
 import com.bot.marcia.dto.Torrent;

@@ -1,4 +1,4 @@
-package com.bot.marcia.service.impl;
+package com.bot.marcia.yts;
 
 
 import com.bot.marcia.dto.YtsMovie;
@@ -17,7 +17,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class YtsLookupService {
 
-    @SneakyThrows
     public YtsMovie buildARequestWithQuery(String imdbId) {
         WebClient.ResponseSpec client = WebClient
                 .builder()
