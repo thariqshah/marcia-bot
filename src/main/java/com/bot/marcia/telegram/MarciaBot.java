@@ -2,7 +2,10 @@ package com.bot.marcia.telegram;
 
 import com.bot.marcia.common.Util;
 import com.bot.marcia.dto.MovieInfo;
+import com.bot.marcia.dto.MoviedbPopular;
 import com.bot.marcia.moviedb.MovieDBClient;
+import com.bot.marcia.moviedb.UserSession;
+import com.bot.marcia.moviedb.UserSessionRepository;
 import com.bot.marcia.service.MovieInfoCreatorService;
 import com.bot.marcia.service.StringBuilderForTelegram;
 import com.bot.marcia.service.impl.YtsLookupService;
@@ -22,6 +25,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,6 +39,8 @@ public class MarciaBot extends TelegramLongPollingBot {
     public final StringBuilderForTelegram stringBuilderForTelegram;
 
     private final MovieDBClient movieDBClient;
+
+    private final UserSessionRepository userSessionRepository;
 
     @Value("${application-configurations.telegram-bot-token}")
     private String telegramBotToken;
@@ -71,6 +77,45 @@ public class MarciaBot extends TelegramLongPollingBot {
             update.setMessage(message);
             this.answerCallBackForTorrentHash(update.getCallbackQuery());
         }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("GENERATE_SESSION_/")) {
+            this.answerCallForPermission(update);
+        }
+        if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("NEXT_WATCH_LIST_")){
+            SendMessage message = new SendMessage();
+            message.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
+            this.getWatchList(message,update.getCallbackQuery().getData().replace("NEXT_WATCH_LIST_",""));
+        }
+    }
+
+    private void answerCallForPermission(Update update) throws TelegramApiException {
+        try {
+            this.saveSession(update.getCallbackQuery());
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Authenticated with theMovieDB ✅");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
+        } catch (Exception e) {
+            log.error("Failed to get a session", e);
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Failed to Authenticate with theMovieDB ❌");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
+        }
+    }
+
+    private void saveSession(CallbackQuery callbackQuery) {
+        var requestToken = Arrays.asList(callbackQuery.getData().split("/")).get(1);
+        var sessionResponse = movieDBClient.generateSessionId(requestToken);
+        var account = movieDBClient.getAccountId(sessionResponse.session_id());
+        UserSession session = new UserSession();
+        session.setChatId(Math.toIntExact(callbackQuery.getMessage().getChatId()));
+        session.setUsername(account.getUsername());
+        session.setSessionId(sessionResponse.session_id());
+        session.setRequestToken(requestToken);
+        session.setAccountId(account.getId().intValue());
+        var savedSession = userSessionRepository.save(session);
     }
 
     private void executeCommands(String command, Update update) throws TelegramApiException {
@@ -97,8 +142,64 @@ public class MarciaBot extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setReplyToMessageId(update.getMessage().getMessageId());
-                update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(2).getText());
+                update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(3).getText());
                 execute(this.lookupMovieSource(update, message));
+                break;
+            }
+            case "/login": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                message.setReplyToMessageId(update.getMessage().getMessageId());
+                var requestToken = movieDBClient.generateRequestToken();
+                var text = """
+                        Authorize me to themoviedb.org
+                                                
+                        - Click the link: https://www.themoviedb.org/authenticate/%s
+                        - Authorize bot
+                        - Come back and click Permission ✅
+                        """.formatted(requestToken.request_token());
+                message.setText(text);
+                var buttons = new ArrayList<InlineKeyboardButton>();
+                buttons.add(InlineKeyboardButton.builder().text("Permission ✅").callbackData("GENERATE_SESSION_/%s".formatted(requestToken.request_token())).build());
+                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
+                message.setReplyMarkup(inlineKeyboardMarkup);
+                execute(message);
+                break;
+            }
+            case "/addtowatchlist": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.addToWatchList(update.getMessage(), true);
+                break;
+            }
+            case "/watchlist": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.getWatchList(message,"1");
+                break;
+            }
+            case "/fav": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.getFavList(message,"1");
+                break;
+            }
+            case "/addtofav": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.addToFavList(update.getMessage(),true);
+                break;
+            }
+            case "/removewatchlist": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.addToWatchList(update.getMessage(),false);
+                break;
+            }
+            case "/removefav": {
+                SendMessage message = new SendMessage();
+                message.setChatId(update.getMessage().getChatId().toString());
+                this.addToFavList(update.getMessage(),false);
                 break;
             }
             default:
@@ -107,16 +208,59 @@ public class MarciaBot extends TelegramLongPollingBot {
         }
     }
 
+    private void addToFavList(Message message, boolean add) {
+        var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
+        var response = movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(),add);
+    }
+
+    private void getFavList(SendMessage message, String pageNumber) throws TelegramApiException {
+        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
+        var watchList = movieDBClient.getFavList(user.get().getAccountId(),user.get().getSessionId(),pageNumber);
+        this.respondWatchListMessage(message,watchList, Integer.valueOf(pageNumber));
+    }
+
+    private void getWatchList(SendMessage message, String pageNumber) throws TelegramApiException {
+        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
+        var watchList = movieDBClient.getWatchList(user.get().getAccountId(),user.get().getSessionId(),pageNumber);
+        this.respondWatchListMessage(message,watchList, Integer.valueOf(pageNumber));
+    }
+
+    private void respondWatchListMessage(SendMessage message, MoviedbPopular watchList,Integer page) throws TelegramApiException {
+        int n = watchList.getResults().size();
+        if(n==0){
+            message.setText("No Movies in watchlist, Add some /addtowatchlist");
+            message.setParseMode("HTML");
+            execute(message);
+        }
+        for (int i = 0; i < n; i++) {
+            var string = messageTemplates.makePopularMovieHtml(watchList.getResults().get(i), i);
+            message.setText(string);
+            message.setParseMode("HTML");
+            if (i == n - 1) {
+                var buttons = new ArrayList<InlineKeyboardButton>();
+                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_WATCH_LIST_%d".formatted(++page)).build());
+                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
+                message.setReplyMarkup(inlineKeyboardMarkup);
+            }
+            execute(message);
+        }
+    }
+
+    private void addToWatchList(Message message, boolean add) {
+        var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
+        var response = movieDBClient.addToWatchList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(),add);
+    }
+
     private void answerCallForYtsLookup(Update update) {
         try {
             SendMessage message = new SendMessage();
-            var some = (Message) update.getCallbackQuery().getMessage();
+            var messageFromCallback = (Message) update.getCallbackQuery().getMessage();
             message.setChatId(update.getCallbackQuery().getMessage().getChatId());
             message.setReplyToMessageId(update.getCallbackQuery().getMessage().getMessageId());
             message.setParseMode("HTML");
             message.enableWebPagePreview();
-            some.setText(some.getEntities().get(2).getText());
-            update.setMessage(some);
+            messageFromCallback.setText(messageFromCallback.getEntities().get(3).getText());
+            update.setMessage(messageFromCallback);
             this.lookupMovieSource(update, message);
             execute(message);
         } catch (Exception e) {
@@ -132,13 +276,13 @@ public class MarciaBot extends TelegramLongPollingBot {
             var string = messageTemplates.makePopularMovieHtml(results.getResults().get(i), i);
             message.setText(string);
             message.setParseMode("HTML");
-            execute(message);
             if (i == n - 1) {
                 var buttons = new ArrayList<InlineKeyboardButton>();
                 buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_POPULAR_%d".formatted(++page)).build());
                 InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
                 message.setReplyMarkup(inlineKeyboardMarkup);
             }
+            execute(message);
         }
     }
 
@@ -149,8 +293,8 @@ public class MarciaBot extends TelegramLongPollingBot {
         message.setReplyToMessageId(update.getMessage().getMessageId());
         var result = movieDBClient.searchAMovie(update.getMessage().getText());
 
-        int n = result.getResults().size();
-        for (int i = 5; i >= 0; i--) {
+        int n = Math.min(result.getResults().size(), 5);
+        for (int i = n - 1; i >= 0; i--) {
             message.setText(messageTemplates.makePopularMovieHtml(result.getResults().get(i), i));
             message.setParseMode("HTML");
             var buttons = new ArrayList<InlineKeyboardButton>();

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "avatar": {
+      "type": "object",
+      "properties": {
+        "gravatar": {
+          "type": "object",
+          "properties": {
+            "hash": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "hash"
+          ]
+        },
+        "tmdb": {
+          "type": "object",
+          "properties": {
+            "avatar_path": {}
+          },
+          "required": [
+            "avatar_path"
+          ]
+        }
+      },
+      "required": [
+        "gravatar",
+        "tmdb"
+      ]
+    },
+    "id": {
+      "type": "number"
+    },
+    "iso_639_1": {
+      "type": "string"
+    },
+    "iso_3166_1": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "include_adult": {
+      "type": "boolean"
+    },
+    "username": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "avatar",
+    "id",
+    "iso_639_1",
+    "iso_3166_1",
+    "name",
+    "include_adult",
+    "username"
+  ]
+}
