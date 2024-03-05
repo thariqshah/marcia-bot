@@ -1,4 +1,4 @@
-package com.bot.marcia.moviedb;
+package com.bot.marcia.moviedb.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +10,7 @@ public class UserSession {
 
     @Id
     @Column(name = "chat_id")
-    private Integer chatId;
+    private String chatId;
 
     @Column(name= "username")
     private String username;

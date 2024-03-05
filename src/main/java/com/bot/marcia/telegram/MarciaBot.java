@@ -1,10 +1,13 @@
 package com.bot.marcia.telegram;
 
-import com.bot.marcia.common.Util;
 import com.bot.marcia.dto.MovieInfo;
 import com.bot.marcia.dto.MoviedbPopular;
 import com.bot.marcia.moviedb.*;
+import com.bot.marcia.moviedb.dto.UpdateListRequestDTO;
 import com.bot.marcia.moviedb.feign.MovieDbFeignClient;
+import com.bot.marcia.moviedb.user.NoUserException;
+import com.bot.marcia.moviedb.user.UserSession;
+import com.bot.marcia.moviedb.user.UserSessionService;
 import com.bot.marcia.yts.MovieInfoCreatorService;
 import com.bot.marcia.yts.YtsLookupService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +24,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.swing.text.html.HTML;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+
+import static com.bot.marcia.telegram.CallBackCommand.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,8 +41,6 @@ public class MarciaBot extends TelegramLongPollingBot {
     public final MovieInfoCreatorService movieInfoCreatorService;
 
     private final MovieDBClient movieDBClient;
-
-    private final UserSessionRepository userSessionRepository;
 
     private final MovieDbFeignClient movieDbFeignClient;
 
@@ -51,6 +55,10 @@ public class MarciaBot extends TelegramLongPollingBot {
     private final MessageTemplates messageTemplates;
 
     private final TokenStorageRepository tokenStorageRepository;
+
+    private final UserSessionService userSessionService;
+
+    private final MovieComponent movieComponent;
 
     @Override
     public String getBotUsername() {
@@ -67,10 +75,50 @@ public class MarciaBot extends TelegramLongPollingBot {
             update.setMessage(message);
             this.answerCallBackQueryForNextPopular(update.getCallbackQuery());
         }
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("YTS_LOOKUP")) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith(YTS_LOOKUP.name())) {
             var message = (Message) update.getCallbackQuery().getMessage();
             update.setMessage(message);
             this.answerCallForYtsLookup(update);
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith(ADD_FAV.name())) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
+            this.updateList(message, true, true);
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Added to Favorites ✅");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith(REMOVE_FAV.name())) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
+            this.updateList(message, false, true);
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Removed from Favorites ❌");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith(REMOVE_WATCH.name())) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
+            this.updateList(message, false, false);
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Removed from watch list ❌");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
+        }
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith(ADD_WATCH.name())) {
+            var message = (Message) update.getCallbackQuery().getMessage();
+            update.setMessage(message);
+            this.updateList(message, true, false);
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            answerCallbackQuery.setText("Added to watch list ✅");
+            answerCallbackQuery.setShowAlert(Boolean.TRUE);
+            execute(answerCallbackQuery);
         }
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().matches("([A-F\\d]{40})")) {
             var message = (Message) update.getCallbackQuery().getMessage();
@@ -103,7 +151,7 @@ public class MarciaBot extends TelegramLongPollingBot {
             this.saveSession(update.getCallbackQuery());
             AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
             answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
-            answerCallbackQuery.setText("Authenticated with theMovieDB ✅");
+            answerCallbackQuery.setText("Authorized with theMovieDB ✅");
             answerCallbackQuery.setShowAlert(Boolean.TRUE);
             execute(answerCallbackQuery);
         } catch (Exception e) {
@@ -129,15 +177,8 @@ public class MarciaBot extends TelegramLongPollingBot {
                 }
                 """.formatted(accessToken.access_token()));
         var account = movieDBClient.getAccountId(sessionToken.session_id());
-        UserSession session = new UserSession();
-        session.setChatId(Math.toIntExact(callbackQuery.getMessage().getChatId()));
-        session.setUsername(account.getUsername());
-        session.setSessionId(sessionToken.session_id());
-        session.setRequestToken(requestToken);
-        session.setAccessToken(accessToken.access_token());
-        session.setAccountId(account.getId().intValue());
-        session.setAccountObjectId(accessToken.account_id());
-        userSessionRepository.save(session);
+        userSessionService.save(String.valueOf(callbackQuery.getMessage().getChatId())
+                , account.getUsername(), sessionToken.session_id(), requestToken, accessToken.access_token(), account.getId().intValue(), String.valueOf(accessToken.account_id()));
     }
 
     private void executeCommands(String command, Update update) throws TelegramApiException {
@@ -165,7 +206,7 @@ public class MarciaBot extends TelegramLongPollingBot {
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setReplyToMessageId(update.getMessage().getMessageId());
                 update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(3).getText());
-                var movie = movieDBClient.getMovie(update.getMessage().getReplyToMessage().getEntities().get(1).getText());
+                var movie = movieDbFeignClient.getMovie(update.getMessage().getReplyToMessage().getEntities().get(1).getText());
                 execute(this.lookupMovieSource(update, message, movie.getImdbId()));
                 break;
             }
@@ -192,12 +233,6 @@ public class MarciaBot extends TelegramLongPollingBot {
                 execute(message);
                 break;
             }
-            case "/addtowatchlist": {
-                SendMessage message = new SendMessage();
-                message.setChatId(update.getMessage().getChatId().toString());
-                this.addToWatchList(update.getMessage(), true);
-                break;
-            }
             case "/watchlist": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
@@ -208,24 +243,6 @@ public class MarciaBot extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
                 this.getFavList(message, "1");
-                break;
-            }
-            case "/addtofav": {
-                SendMessage message = new SendMessage();
-                message.setChatId(update.getMessage().getChatId().toString());
-                this.addToFavList(update.getMessage(), true);
-                break;
-            }
-            case "/removewatchlist": {
-                SendMessage message = new SendMessage();
-                message.setChatId(update.getMessage().getChatId().toString());
-                this.addToWatchList(update.getMessage(), false);
-                break;
-            }
-            case "/removefav": {
-                SendMessage message = new SendMessage();
-                message.setChatId(update.getMessage().getChatId().toString());
-                this.addToFavList(update.getMessage(), false);
                 break;
             }
             case "/recommend": {
@@ -241,143 +258,109 @@ public class MarciaBot extends TelegramLongPollingBot {
     }
 
     private void recommendMovies(SendMessage message, String number) throws TelegramApiException {
-        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
-        var watchList = movieDbFeignClient.getRecommendMovies(user.get().getAccountObjectId(), number);
+        var user = getUserSession(message);
+        var watchList = movieDbFeignClient.getRecommendMovies(user.getAccountObjectId(), number);
         this.respondRecommendMessage(message, watchList, Integer.valueOf(number));
     }
 
-    private void addToFavList(Message message, boolean add) {
-        var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
-        movieDBClient.addToFavList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
+    private UserSession getUserSession(SendMessage message) throws TelegramApiException {
+        try {
+            return userSessionService.getLoggedInUser(message.getChatId());
+        } catch (NoUserException e) {
+            message.setText(messageTemplates.makeNoUserMessage());
+            message.setParseMode(ParseMode.HTML.name());
+            super.execute(message);
+        }
+        throw new NoUserException();
+    }
+
+    private void updateList(Message message, boolean isAdd, boolean isFav) {
+        var user = userSessionService.getLoggedInUser(String.valueOf(message.getChatId()));
+        var listType = isFav ? "favorite" : "watchlist";
+        var body = new UpdateListRequestDTO("movie", message.getEntities().get(1).getText(), !isFav, isAdd);
+        movieDbFeignClient.addToList(listType, Integer.valueOf(user.getAccountId()), user.getSessionId(), body);
     }
 
     private void getFavList(SendMessage message, String pageNumber) throws TelegramApiException {
-        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
-        var watchList = movieDBClient.getFavList(user.get().getAccountId(), user.get().getSessionId(), pageNumber);
+        var user = getUserSession(message);
+        var watchList = movieDbFeignClient.getList("favorite", Integer.valueOf(user.getAccountId()), user.getSessionId(), pageNumber, "created_at.asc");
         this.respondFavListMessage(message, watchList, Integer.valueOf(pageNumber));
     }
 
     private void getWatchList(SendMessage message, String pageNumber) throws TelegramApiException {
-        var user = userSessionRepository.findById(Integer.valueOf(message.getChatId()));
-        var watchList = movieDBClient.getWatchList(user.get().getAccountId(), user.get().getSessionId(), pageNumber);
+        var user = getUserSession(message);
+        var watchList = movieDBClient.getWatchList(Integer.valueOf(user.getAccountId()), user.getSessionId(), pageNumber);
         this.respondWatchListMessage(message, watchList, Integer.valueOf(pageNumber));
     }
 
     private void respondWatchListMessage(SendMessage message, MoviedbPopular watchList, Integer page) throws TelegramApiException {
         int n = watchList.getResults().size();
+        var buttons = new ArrayList<InlineKeyboardButton>();
         if (n == 0) {
-            message.setText("No Movies in watchlist, Add some /addtowatchlist");
+            message.setText("No Movies in watchlist!");
             message.setParseMode("HTML");
             execute(message);
         }
+        buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
+        buttons.add(InlineKeyboardButton.builder().text("Remove ❌").callbackData(REMOVE_WATCH.name()).build());
         for (int i = 0; i < n; i++) {
-            var string = messageTemplates.makePopularMovieHtml(watchList.getResults().get(i), i);
-            message.setText(string);
-            message.setParseMode("HTML");
-            var downloadButton = new ArrayList<InlineKeyboardButton>();
-            downloadButton.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
-            InlineKeyboardMarkup downloadMarkupKeyboard = InlineKeyboardMarkup.builder().keyboardRow(downloadButton).build();
-            message.setReplyMarkup(downloadMarkupKeyboard);
             if (i == n - 1) {
-                var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(downloadButton.get(0));
-                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_WATCH_LIST_%d".formatted(++page)).build());
-                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-                message.setReplyMarkup(inlineKeyboardMarkup);
+                buttons.add(InlineKeyboardButton.builder().text("⏭").callbackData("NEXT_WATCH_LIST_%d".formatted(++page)).build());
             }
+            message = movieComponent.getMovieMessage(message, watchList.getResults().get(i), i, buttons);
             execute(message);
         }
     }
 
-    private void respondFavListMessage(SendMessage message, MoviedbPopular watchList, Integer page) throws TelegramApiException {
-        int n = watchList.getResults().size();
+    private void respondFavListMessage(SendMessage message, MoviedbPopular favList, Integer page) throws TelegramApiException {
+        int n = favList.getResults().size();
+        var buttons = new ArrayList<InlineKeyboardButton>();
         if (n == 0) {
-            message.setText("No Movies in watchlist, Add some /addtowatchlist");
+            message.setText("No Favorites!");
             message.setParseMode("HTML");
             execute(message);
         }
+        buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
+        buttons.add(InlineKeyboardButton.builder().text("Remove ❌").callbackData(REMOVE_FAV.name()).build());
         for (int i = 0; i < n; i++) {
-            var string = messageTemplates.makePopularMovieHtml(watchList.getResults().get(i), i);
-            message.setText(string);
-            message.setParseMode("HTML");
-            var downloadButton = new ArrayList<InlineKeyboardButton>();
-            downloadButton.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
-            InlineKeyboardMarkup downloadMarkupKeyboard = InlineKeyboardMarkup.builder().keyboardRow(downloadButton).build();
-            message.setReplyMarkup(downloadMarkupKeyboard);
             if (i == n - 1) {
-                var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(downloadButton.get(0));
-                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_FAV_LIST_%d".formatted(++page)).build());
-                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-                message.setReplyMarkup(inlineKeyboardMarkup);
+                buttons.add(InlineKeyboardButton.builder().text("⏭").callbackData("NEXT_FAV_LIST_%d".formatted(++page)).build());
             }
+            message = movieComponent.getMovieMessage(message, favList.getResults().get(i), i, buttons);
             execute(message);
         }
     }
 
-    private void respondRecommendMessage(SendMessage message, MoviedbPopular watchList, Integer page) throws TelegramApiException {
-        int n = watchList.getResults().size();
+    private void respondRecommendMessage(SendMessage message, MoviedbPopular recommendedList, Integer page) throws TelegramApiException {
+        int n = recommendedList.getResults().size();
+        var buttons = new ArrayList<InlineKeyboardButton>();
         if (n == 0) {
-            message.setText("No Movies in watchlist, Add some /addtowatchlist");
+            message.setText("No Recommendations!");
             message.setParseMode("HTML");
             execute(message);
         }
+        buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
+        buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
         for (int i = 0; i < n; i++) {
-            var string = messageTemplates.makePopularMovieHtml(watchList.getResults().get(i), i);
-            message.setText(string);
-            message.setParseMode("HTML");
-            var downloadButton = new ArrayList<InlineKeyboardButton>();
-            downloadButton.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
-            InlineKeyboardMarkup downloadMarkupKeyboard = InlineKeyboardMarkup.builder().keyboardRow(downloadButton).build();
-            message.setReplyMarkup(downloadMarkupKeyboard);
             if (i == n - 1) {
-                var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(downloadButton.get(0));
-                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_RECOMMEND_%d".formatted(++page)).build());
-                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-                message.setReplyMarkup(inlineKeyboardMarkup);
+                buttons.add(InlineKeyboardButton.builder().text("⏭").callbackData("NEXT_RECOMMEND_%d".formatted(++page)).build());
             }
+            message = movieComponent.getMovieMessage(message, recommendedList.getResults().get(i), i, buttons);
             execute(message);
-        }
-    }
-
-    private void addToWatchList(Message message, boolean add) {
-        var user = userSessionRepository.findById(Math.toIntExact(message.getChatId()));
-        var response = movieDBClient.addToWatchList(user.get().getAccountId(), user.get().getSessionId(), message.getReplyToMessage().getEntities().get(1).getText(), add);
-    }
-
-    private void answerCallForYtsLookup(Update update) {
-        try {
-            SendMessage message = new SendMessage();
-            var messageFromCallback = (Message) update.getCallbackQuery().getMessage();
-            message.setChatId(update.getCallbackQuery().getMessage().getChatId());
-            message.setReplyToMessageId(update.getCallbackQuery().getMessage().getMessageId());
-            message.setParseMode("HTML");
-            message.enableWebPagePreview();
-            var movie = movieDBClient.getMovie(messageFromCallback.getEntities().get(1).getText());
-            messageFromCallback.setText(messageFromCallback.getEntities().get(3).getText());
-            update.setMessage(messageFromCallback);
-            this.lookupMovieSource(update, message, movie.getImdbId());
-            execute(message);
-        } catch (Exception e) {
-            log.error("", e);
         }
     }
 
     private void popularAction(SendMessage message, int page) throws TelegramApiException {
-        var results = movieDBClient.getPopularMovies(page);
-
-        int n = results.getResults().size();
+        var popularMovies = movieDBClient.getPopularMovies(page);
+        int n = popularMovies.getResults().size();
+        var buttons = new ArrayList<InlineKeyboardButton>();
+        buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
+        buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
         for (int i = 0; i < n; i++) {
-            var string = messageTemplates.makePopularMovieHtml(results.getResults().get(i), i);
-            message.setText(string);
-            message.setParseMode("HTML");
             if (i == n - 1) {
-                var buttons = new ArrayList<InlineKeyboardButton>();
-                buttons.add(InlineKeyboardButton.builder().text("NEXT").callbackData("NEXT_POPULAR_%d".formatted(++page)).build());
-                InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-                message.setReplyMarkup(inlineKeyboardMarkup);
+                buttons.add(InlineKeyboardButton.builder().text("⏭").callbackData("NEXT_POPULAR_%d".formatted(++page)).build());
             }
+            message = movieComponent.getMovieMessage(message, popularMovies.getResults().get(i), i, buttons);
             execute(message);
         }
     }
@@ -387,16 +370,13 @@ public class MarciaBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
         message.setReplyToMessageId(update.getMessage().getMessageId());
-        var result = movieDBClient.searchAMovie(update.getMessage().getText());
-
-        int n = Math.min(result.getResults().size(), 5);
-        for (int i = n - 1; i >= 0; i--) {
-            message.setText(messageTemplates.makePopularMovieHtml(result.getResults().get(i), i));
-            message.setParseMode("HTML");
-            var buttons = new ArrayList<InlineKeyboardButton>();
-            buttons.add(InlineKeyboardButton.builder().text("DOWNLOAD TORRENT 🦜🏴‍☠️").callbackData("YTS_LOOKUP").build());
-            InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder().keyboardRow(buttons).build();
-            message.setReplyMarkup(inlineKeyboardMarkup);
+        var searchedAMovie = movieDBClient.searchAMovie(update.getMessage().getText());
+        int n = Math.min(searchedAMovie.getResults().size(), 6);
+        var buttons = new ArrayList<InlineKeyboardButton>();
+        buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
+        buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
+        for (int i = n - 1; i == 0; i--) {
+            message = movieComponent.getMovieMessage(message, searchedAMovie.getResults().get(i), i, buttons);
             execute(message);
         }
     }
@@ -439,6 +419,24 @@ public class MarciaBot extends TelegramLongPollingBot {
         answerCallbackQuery.setShowAlert(Boolean.TRUE);
         execute(answerCallbackQuery);
         this.sendFile(callbackQuery.getData(), String.valueOf(callbackQuery.getMessage().getChatId()), callbackQuery.getMessage().getMessageId());
+    }
+
+    private void answerCallForYtsLookup(Update update) {
+        try {
+            SendMessage message = new SendMessage();
+            var messageFromCallback = (Message) update.getCallbackQuery().getMessage();
+            message.setChatId(update.getCallbackQuery().getMessage().getChatId());
+            message.setReplyToMessageId(update.getCallbackQuery().getMessage().getMessageId());
+            message.setParseMode("HTML");
+            message.enableWebPagePreview();
+            var movie = movieDbFeignClient.getMovie(messageFromCallback.getEntities().get(1).getText());
+            messageFromCallback.setText(messageFromCallback.getEntities().get(3).getText());
+            update.setMessage(messageFromCallback);
+            this.lookupMovieSource(update, message, movie.getImdbId());
+            execute(message);
+        } catch (Exception e) {
+            log.error("", e);
+        }
     }
 
 

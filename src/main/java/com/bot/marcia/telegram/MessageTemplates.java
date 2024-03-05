@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageTemplates {
 
-    public String makePopularMovieHtml(Result moviedbPopular, int index) {
+    public String makePopularMovieHtml(Result moviedbPopular, long index) {
         return """
-                <b>#%d</b> TMDB ID:<b>%s</b>\n
+                <b>#%d</b> TMDB ID - <b>%s</b>\n
                 <b>Title:</b> <a href="https://www.themoviedb.org/movie/%s">%s</a>\n
                 <b>Description:</b> %s
                 """.formatted(index + 1,
-                moviedbPopular.getId(),
-                moviedbPopular.getId(),
+                moviedbPopular.getId().intValue(),
+                moviedbPopular.getId().intValue(),
                 makeTitle(moviedbPopular),
                 moviedbPopular.getOverview());
     }
@@ -40,16 +40,19 @@ public class MessageTemplates {
                 
                 Feeds on themoviedb.org for movie information.
                 
-                👉 Check commands to see actions
-                👉 /login could be used to Authorize with themoviedb.org
+                👉 /login to Authorize with themoviedb.org
                 👉 /popular to see trending movies
-                👉 /recommend get recommendations - login required
-                👉 Reply /download to get torrent file
-                👉 Reply /addtowatchlist to add watch List
-                👉 Reply /addtofav to add Fav List
+                👉 /recommend get recommendations
                 👉 List /fav, /watchlist
-                
+                👉 Send a movie name to search for it.
                 """.formatted(name);
     }
 
+    public String makeNoUserMessage() {
+        return """
+                🔓 Not logged in with themoviedb.org
+                Action requires moviedb account
+                try again with /login
+                """;
+    }
 }
