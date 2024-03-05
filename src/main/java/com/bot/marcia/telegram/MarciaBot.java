@@ -274,11 +274,22 @@ public class MarciaBot extends TelegramLongPollingBot {
         throw new NoUserException();
     }
 
-    private void updateList(Message message, boolean isAdd, boolean isFav) {
-        var user = userSessionService.getLoggedInUser(String.valueOf(message.getChatId()));
-        var listType = isFav ? "favorite" : "watchlist";
-        var body = new UpdateListRequestDTO("movie", message.getEntities().get(1).getText(), !isFav, isAdd);
-        movieDbFeignClient.addToList(listType, Integer.valueOf(user.getAccountId()), user.getSessionId(), body);
+    private void updateList(Message message, boolean isAdd, boolean isFav) throws TelegramApiException {
+        try {
+            var user = userSessionService.getLoggedInUser(String.valueOf(message.getChatId()));
+            var listType = isFav ? "favorite" : "watchlist";
+            var body = new UpdateListRequestDTO("movie", message.getEntities().get(1).getText(), !isFav, isAdd);
+            movieDbFeignClient.addToList(listType, Integer.valueOf(user.getAccountId()), user.getSessionId(), body);
+        } catch (NoUserException e) {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(message.getChatId());
+            sendMessage.setParseMode(ParseMode.HTML.name());
+            sendMessage.setText(messageTemplates.makeNoUserMessage());
+            super.execute(sendMessage);
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     private void getFavList(SendMessage message, String pageNumber) throws TelegramApiException {
