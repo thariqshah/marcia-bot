@@ -33,7 +33,7 @@ public class MovieInfoCreatorService {
                 .name(movie.getTitleEnglish())
                 .longName(movie.getTitleLong())
                 .ytsUrl(movie.getUrl())
-                .desc(movie.getDescriptionIntro().substring(0,500))
+                .desc(movie.getDescriptionIntro().length() > 500 ? movie.getDescriptionIntro().substring(0, 500) : movie.getDescriptionIntro())
                 .year(movie.getYear().intValue())
                 .coverImageUrl(movie.getLargeCoverImage())
                 .build();
