@@ -197,19 +197,6 @@ public class MarciaBot extends TelegramLongPollingBot {
                 this.popularAction(message, 1);
                 break;
             }
-            case "/wheretowatch": {
-                this.answerWhereToWatch(update);
-                break;
-            }
-            case "/download": {
-                SendMessage message = new SendMessage();
-                message.setChatId(update.getMessage().getChatId().toString());
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                update.getMessage().setText(update.getMessage().getReplyToMessage().getEntities().get(3).getText());
-                var movie = movieDbFeignClient.getMovie(update.getMessage().getReplyToMessage().getEntities().get(1).getText());
-                execute(this.lookupMovieSource(update, message, movie.getImdbId()));
-                break;
-            }
             case "/login": {
                 SendMessage message = new SendMessage();
                 message.setChatId(update.getMessage().getChatId().toString());
@@ -382,11 +369,11 @@ public class MarciaBot extends TelegramLongPollingBot {
         message.setChatId(update.getMessage().getChatId());
         message.setReplyToMessageId(update.getMessage().getMessageId());
         var searchedAMovie = movieDBClient.searchAMovie(update.getMessage().getText());
-        int n = Math.min(searchedAMovie.getResults().size(), 6);
+        int n = Math.min(searchedAMovie.getResults().size(), 5);
         var buttons = new ArrayList<InlineKeyboardButton>();
         buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
         buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
-        for (int i = n - 1; i == 0; i--) {
+        for (int i = n - 1; i >= 0; i--) {
             message = movieComponent.getMovieMessage(message, searchedAMovie.getResults().get(i), i, buttons);
             execute(message);
         }
@@ -443,7 +430,7 @@ public class MarciaBot extends TelegramLongPollingBot {
             var movie = movieDbFeignClient.getMovie(messageFromCallback.getEntities().get(1).getText());
             messageFromCallback.setText(messageFromCallback.getEntities().get(3).getText());
             update.setMessage(messageFromCallback);
-            this.lookupMovieSource(update, message, movie.getImdbId());
+            this.lookupMovieSource(message, movie.getImdbId());
             execute(message);
         } catch (Exception e) {
             log.error("", e);
@@ -451,17 +438,12 @@ public class MarciaBot extends TelegramLongPollingBot {
     }
 
 
-    private SendMessage lookupMovieSource(Update update, SendMessage message, String imdbId) {
+    private SendMessage lookupMovieSource(SendMessage message, String imdbId) {
         try {
-            MovieInfo movieInfo;
-            try {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(imdbId));
-            } catch (IndexOutOfBoundsException e) {
-                movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(imdbId));
-            }
-            if (update.getMessage().isGroupMessage() && update.getMessage().getText().startsWith("@marcia_movie_bot"))
-                message.setText(messageTemplates.makeMovieFromYts(movieInfo));
-            else message.setText(messageTemplates.makeMovieFromYts(movieInfo));
+            MovieInfo movieInfo = movieInfoCreatorService.buildMovieInfo(ytsLookupService.buildARequestWithQuery(imdbId));
+            if (movieInfo.getName() == null || movieInfo.getName().isBlank())
+                throw new NullPointerException();
+            message.setText(messageTemplates.makeMovieFromYts(movieInfo));
 
             var buttons = new ArrayList<InlineKeyboardButton>();
 
@@ -472,8 +454,8 @@ public class MarciaBot extends TelegramLongPollingBot {
             message.setParseMode("HTML");
             message.enableWebPagePreview();
         } catch (Exception e) {
-            log.error("error looking up movie", e);
-            message.setText("I couldn't find what you are looking for \uD83D\uDC94");
+            log.error("error looking up movie imdb: {}", imdbId, e);
+            message.setText("I couldn't find the torrent file in YTS \uD83D\uDC94");
             message.setParseMode("HTML");
             message.enableWebPagePreview();
         }
