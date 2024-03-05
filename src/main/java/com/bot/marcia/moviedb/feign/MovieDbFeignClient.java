@@ -3,12 +3,11 @@ package com.bot.marcia.moviedb.feign;
 import com.bot.marcia.dto.MovieDbMovie;
 import com.bot.marcia.dto.MoviedbPopular;
 import com.bot.marcia.moviedb.dto.RequestTokenDTO;
+import com.bot.marcia.moviedb.dto.ResponseDTO;
+import com.bot.marcia.moviedb.dto.UpdateListRequestDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "moviedbservice", url = "https://api.themoviedb.org/")
 public interface MovieDbFeignClient {
@@ -26,4 +25,12 @@ public interface MovieDbFeignClient {
 
     @GetMapping(value = "/4/account/{account_object_id}/movie/recommendations")
     MoviedbPopular getRecommendMovies(@PathVariable(name = "account_object_id") String accountObjectId, @RequestParam(value = "page") String page);
+
+    @PostMapping(value = "/3/account/{account_id}/{list_id}")
+    ResponseDTO addToList(@PathVariable(name = "list_id") String listId, @PathVariable(name = "account_id") Integer accountId,
+                          @RequestParam(value = "session_id") String sessionId, @RequestBody UpdateListRequestDTO body);
+
+    @GetMapping(value = "/3/account/{account_id}/{list}/movies")
+    MoviedbPopular getList(@PathVariable(name = "list") String list, @PathVariable(name = "account_id") Integer accountId,
+                           @RequestParam(value = "session_id") String sessionId, @RequestParam(value = "page") String page, @RequestParam(value = "sort_by") String sort);
 }
