@@ -369,35 +369,18 @@ public class MarciaBot extends TelegramLongPollingBot {
         message.setChatId(update.getMessage().getChatId());
         message.setReplyToMessageId(update.getMessage().getMessageId());
         var searchedAMovie = movieDBClient.searchAMovie(update.getMessage().getText());
+        if(searchedAMovie.getResults().isEmpty()){
+            message.setText("""
+                    No search results found ❌
+                    """);
+            this.execute(message);
+        }
         int n = Math.min(searchedAMovie.getResults().size(), 5);
         var buttons = new ArrayList<InlineKeyboardButton>();
         buttons.add(InlineKeyboardButton.builder().text("Add Fav ♥").callbackData(ADD_FAV.name()).build());
         buttons.add(InlineKeyboardButton.builder().text("Later 📺").callbackData(ADD_WATCH.name()).build());
         for (int i = n - 1; i >= 0; i--) {
             message = movieComponent.getMovieMessage(message, searchedAMovie.getResults().get(i), i, buttons);
-            execute(message);
-        }
-    }
-
-    @SneakyThrows
-    private void answerWhereToWatch(Update update) {
-        SendMessage message = new SendMessage();
-        if (update.getMessage().getReplyToMessage() == null) {
-            message.setText("‼ /wheretowatch should be tagged to a movie reply message");
-            message.setChatId(update.getMessage().getChatId());
-            message.setReplyToMessageId(update.getMessage().getMessageId());
-            message.setParseMode("HTML");
-            message.disableWebPagePreview();
-            execute(message);
-        } else {
-            var link = """
-                    <a href= "https://www.themoviedb.org/movie/%s/watch">Where to Watch</a>
-                    """.formatted(update.getMessage().getReplyToMessage().getEntities().get(2).getUrl().substring(33));
-            message.setText(link);
-            message.setChatId(update.getMessage().getChatId());
-            message.setReplyToMessageId(update.getMessage().getMessageId());
-            message.setParseMode("HTML");
-            message.enableWebPagePreview();
             execute(message);
         }
     }
