@@ -9,8 +9,8 @@ Discord bot & Telegram bot build on top of [JAVACORD](https://github.com/Javacor
 
 ---
 
-* Java 11
-* Maven 3 <br>
+* Java 21
+* Maven 3+ <br>
 
 
 build command
@@ -44,7 +44,6 @@ Change the configuration in spring-boot application.yml file
 
 ```yaml
 application-configurations:
-discord-bot-token: { your discord bot token goes here }
 telegram-bot-token: { your telegram bot token goes here }
 ```
 
@@ -53,8 +52,6 @@ telegram-bot-token: { your telegram bot token goes here }
 ---
 
 Telegram: [https://t.me/marcia_movie_bot](https://t.me/marcia_movie_bot)
-
-Discord: [click here to invite bot to your channel](https://discord.com/oauth2/authorize?client_id=874578310955421716&scope=bot&permissions=0)
 
 
 # Bot Commands
